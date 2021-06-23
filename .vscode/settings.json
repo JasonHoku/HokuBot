@@ -1,0 +1,48 @@
+{
+	"[javascript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[json]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[html]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[markdown]": {
+		"editor.defaultFormatter": "yzhang.markdown-all-in-one"
+	},
+
+	"[scss]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[jsonc]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+
+	"workbench.iconTheme": "material-icon-theme",
+	"editor.accessibilitySupport": "off",
+	"git.autofetch": true,
+	"git.enableSmartCommit": true,
+	"powermode.enabled": true,
+	"synthwave84.disableGlow": false,
+	"synthwave84.enableGlow": "0.45",
+	"tabnine.experimentalAutoImports": true,
+	"powermode.enableShake": false,
+	"powermode.explosionDuration": 500,
+	"powermode.explosionSize": 12,
+	"powermode.maxExplosions": 2,
+	"powermode.shakeIntensity": 1,
+	"prettier.printWidth": 55,
+	"workbench.colorTheme": "SynthWave '84",
+	"synthwave84.brightness": 0.75,
+	"editor.lineHeight": 25,
+	"editor.wordWrap": "on",
+	"editor.fontSize": 15,
+	"auto-rename-tag.activationOnLanguage": ["*"],
+	"editor.fontFamily": "Fira Code",
+	"editor.fontLigatures": true,
+	"terminal.integrated.fontFamily": "monospace",
+	"cSpell.words": [
+		"pono"
+	]
+}

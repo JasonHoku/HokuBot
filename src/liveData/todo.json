@@ -1,0 +1,18 @@
+{
+    "List": [
+        " cleanTodoString",
+        " addDailyTodoCounter",
+        " script!Giveaway",
+        " CommandNotRecognizedHelper",
+        " add!GitHub",
+        " AddCounterToRemovedGoals",
+        " SayStuffBotCommand"
+    ],
+    "RemovedList": [
+        "SayGoodBye",
+        "testTodo",
+        " CreateFinishedTodoList",
+        " EnhanceTodo",
+        " TestRemovalTodoList"
+    ]
+}
