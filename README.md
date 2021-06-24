@@ -11,10 +11,15 @@ Example and full source for your own Firebase hosted app.
 #Caveats include:
 
 Full Auth Firebase DB Schema
+
 Daily Dictionary Web Scraping
+
 Daily YouTube API Scraping
+
 Daily Discord Announcements
+
 Twitch Announcements & Commands
+
 High-Scaling (10,000+ Items) Kanban-like To-Do Manager 
 
 
