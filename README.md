@@ -14,6 +14,8 @@ Example and full source for your own Firebase hosted app.
 
 Full Auth Firebase DB Schema
 
+Full Backend Powered Open-Source Firestore API Key Setup
+
 Daily Dictionary Web Scraping
 
 Daily YouTube API Scraping
