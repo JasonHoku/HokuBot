@@ -22,8 +22,10 @@ High-Scaling (10,000+ Items) Kanban-like To-Do Manager
 
 1.) Download these source files and copy them in your chosen working directory
 
+
 2.) Sign-up for Firebase:
 http://firebase.com/
+
 
 3.) Initialize your firebase project and emulators in your chosen working directory with nodejs firebase-tools and when prompted select the following:
 Initialize the project with access to: hosting, firestore, auth, functions
@@ -34,15 +36,19 @@ do not convert to single-page-application
 
 https://www.google.com/search?q=firebase-tools&rlz=1C1CHBF_enUS918US918&oq=firebase-tools&aqs=chrome..69i57j0l7.2280j0j7&sourceid=chrome&ie=UTF-8
 
+
 4.) Run `npm i` next to package.json
 this run the install process, populating /node_modules/ with the CRA & frameworks listed in package.json
 
-4.) Run `npm run femu` in your chosen working directory next to package.json
+
+5.) Run `npm run femu` in your chosen working directory next to package.json
 this will begin the firebase emulation suite in configuration with ReactJS for hot-reloading, webpack bundling and building (at deployment) to the /build/ folder
 
-5.) The project will launch locally and run the functions console & reactjs console in tandem in the main console through the use of npm-run-all 
 
-6.)Deployment
+6.) The project will launch locally and run the functions console & reactjs console in tandem in the main console through the use of npm-run-all 
+
+
+7.)Deployment
 After you've decided on your setup/changes you can run the following to send your code to firebase hosting and keep your app live 24/7:
 
 `npm run fb`
@@ -59,7 +65,8 @@ Updates all firebase functions
 These options speed up deployment times as the seperate processes each take their own minute or so.
 
 
-7.) Connect to the HokuBot Network ##WIP
+
+8.) Connect to the HokuBot Network ##WIP
 Share your code, functions and features with others through the use of HokuBot rest API server clusters, release your own Discord/Twitter community functions, seamlessly integrate new functions into the community global api list and get credited for your work.
 
 
