@@ -1,7 +1,9 @@
 
 ## HokuBot
 
-Twitch, Discord, YouTube, Firestore, Web Control Panel API Utility
+100% Open-Source Free Quotas Firebase Hosted 24/7 Web & Local JavaScript App
+
+Utilizes Discord, Twitch, YouTube, Firebase, Web Control Panel API Utility
 
 Google Firebase Asset + API Query/Crawler Control Panel
 
