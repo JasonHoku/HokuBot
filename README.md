@@ -30,7 +30,7 @@ Example and full source for your own Firebase hosted app.
 
 ## How to use it:
 
-#Prerequisites
+## Prerequisites
 
 - https://nodejs.org/ -  14.17.1 LTS
 
@@ -39,7 +39,7 @@ Example and full source for your own Firebase hosted app.
 - npm firebase-tools :
 https://firebase.google.com/docs/cli
 
-# Installation
+## Installation
 
 1.) Download these source files and copy them in your chosen working directory
 
@@ -56,17 +56,37 @@ http://firebase.com/
 - do not convert to single-page-application
 
 
-
-
 4.) Run `npm i` next to package.json
 this run the install process, populating /node_modules/ with the CRA & frameworks listed in package.json
 
 
-Install Complete!
+Install Complete.
 
 
-# Running HokuBot
+## Running HokuBot
 
+#API's & Keys
+
+In order to access all API functions each API needs database key propagation for the system to run.
+
+#Discord API JS: https://github.com/JasonHoku/HokuBot/blob/main/functions/components/DiscordTools.js
+
+- Firestore Location : Secrets.dbData.APIKeys.DiscordAPI
+
+#Twitch API JS: https://github.com/JasonHoku/HokuBot/blob/main/functions/components/TwitchTools.js
+
+- Firestore Locations : - Secrets.dbData.APIKeys.TwitchSecret
+
+#YouTube API JS: https://github.com/JasonHoku/HokuBot/blob/main/functions/components/YouTubeData.js
+
+- Firestore Location : Secrets.dbData.APIKeys.YTAPI
+
+
+
+
+#Running HokuBot Locally
+
+Running Firebase apps locally is ideal for development & testing, make and send your changes first then access your app from any device with a web browser or PWA technology.
 
 1.) Run `npm run femu` in your chosen working directory next to package.json
 this will begin the firebase emulation suite in configuration with ReactJS for hot-reloading, webpack bundling and building (at deployment) to the /build/ folder
@@ -77,7 +97,7 @@ this will begin the firebase emulation suite in configuration with ReactJS for h
 
 
 
-# Deploying To Firebase
+## Deploying To Firebase
 
 After you've decided on your setup/changes you can run the following to send your code to firebase hosting and keep your app live 24/7:
 
