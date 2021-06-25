@@ -12,19 +12,20 @@ Example and full source for your own Firebase hosted app.
 
 #Caveats include:
 
-Full Auth Firebase DB Schema
+- Full Auth Firebase DB Schema With Backend Scheduled CRUD Operations
 
-Full Backend Powered Open-Source Firestore API Key Setup
+- Full Backend Powered Open-Source Firestore Driven API Key Setup (Requires API Keys in Firestore Database)
 
-Daily Dictionary Web Scraping
+- Daily Dictionary Web Scraping -> Word Of The Day Announcements
 
-Daily YouTube API Scraping
+- Daily YouTube API Scraping (Utilise free daily YTSearch API quota to announce new YT videos to your channels)
 
-Daily Discord Announcements
+- Daily Discord Announcements (Word of the day, stat reports, random quote)
 
-Twitch Announcements & Commands
+- Twitch Announcements & Commands (Database driven announcements on timer)
 
-High-Scaling (10,000+ Items) Kanban-like To-Do Manager 
+- Kanban-like To-Do Manager -> Firestore DB Task Manager
+
 
 
 # How to use it:
@@ -88,3 +89,10 @@ Questions comments & concerns are welcome.
 
 
 ![image](https://user-images.githubusercontent.com/6715569/123181483-1d953f00-d429-11eb-93d6-d244d2ec7050.png)
+
+
+![image](https://user-images.githubusercontent.com/6715569/123477332-987d6780-d599-11eb-8fc8-a2798d8a89d8.png)
+
+
+![image](https://user-images.githubusercontent.com/6715569/123477354-a16e3900-d599-11eb-86ad-f3393f0fbb1b.png)
+
