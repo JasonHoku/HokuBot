@@ -461,3 +461,12 @@ exports.oneHourInterval = functions.pubsub
 				}
 			});
 	});
+
+exports.DailyDiscordAnnounceFunction = functions.pubsub
+	.schedule("7 05 * * *")
+	.timeZone("Pacific/Honolulu")
+	.onRun((context) => {
+		const DiscordDailyAnnouncer = require("./components/DiscordDailyAnnouncer");
+		DiscordDailyAnnouncer.DiscordDailyAnnouncer();
+		return null;
+	});
