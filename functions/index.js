@@ -463,10 +463,9 @@ exports.oneHourInterval = functions.pubsub
 	});
 
 exports.DailyDiscordAnnounceFunction = functions.pubsub
-	.schedule("7 05 * * *")
+	.schedule("48 10 * * *")
 	.timeZone("Pacific/Honolulu")
 	.onRun((context) => {
 		const DiscordDailyAnnouncer = require("./components/DiscordDailyAnnouncer");
 		DiscordDailyAnnouncer.DiscordDailyAnnouncer();
-		return null;
 	});
