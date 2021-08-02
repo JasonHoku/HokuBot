@@ -74,7 +74,7 @@ export function TaskerComponent(props) {
 							boxShadow: "0px  2px 3px 3px #221133",
 						}}
 					>
-						To Do ({window.todoList.split("|$%$|").length - 2})
+						To Do ({window.todoList.split("|$%$|").length - 1})
 					</span>
 					<br />
 					<br />{" "}
@@ -219,11 +219,11 @@ export function TaskerComponent(props) {
 							boxShadow: "0px  2px 3px 3px #221133",
 						}}
 					>
-						In Action ({window.todoListAction.split("|$%$|").length - 2})
+						In Action ({window.todoListAction.split("|$%$|").length - 1})
 					</span>
 					<br />
 					{props.gotToDoCollection.map((el, index) => {
-						if (el.status === 1) {
+						if (el.status === 1 || el.status === 3) {
 							return (
 								<div
 									style={{
@@ -615,7 +615,6 @@ export function TaskerComponent(props) {
 										&nbsp;
 										<button
 											onClick={() => {
-
 												async function runFinToDo() {
 													var db = firebase.firestore();
 													await db
@@ -623,7 +622,7 @@ export function TaskerComponent(props) {
 														.doc(el.title)
 														.set(
 															{
-																status: 2,
+																status: el.status === 1 ? 2 : el.status === 3 ? 4 : "error",
 																priority: 10,
 																timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
 															},
@@ -684,6 +683,77 @@ export function TaskerComponent(props) {
 										>
 											Fin
 										</button>{" "}
+										&nbsp; &nbsp;
+										<button
+											onClick={() => {
+												async function toggleRepeatable() {
+													var db = firebase.firestore();
+													await db
+														.collection("ToDoCollection")
+														.doc(el.title)
+														.set(
+															{
+																status: el.status === 1 ? 3 : el.status === 3 ? 1 : "error",
+																priority: 10,
+																timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
+															},
+															{ merge: true }
+														)
+														.then(
+															setTimeout(() => {
+																db
+																	.collection("ToDoCollection")
+																	.get()
+																	.then((snapshot) => {
+																		var dbData = {};
+																		snapshot.forEach((doc) => {
+																			var key = doc.id;
+																			var data = doc.data();
+																			data["key"] = key;
+																			dbData[key] = data;
+																		});
+																		console.log(dbData);
+																		var tempVar = "";
+																		var tempVar2 = "";
+																		var tempVar3 = "";
+																		//
+																		//
+																		window.activeToDoCounter--;
+
+																		Object.values(dbData).forEach((el) => {
+																			if (el.timeStamp === null) {
+																				console.log(" ");
+																				console.log(el.title);
+																				console.log(" ");
+																				el.timeStamp =
+																					firebase.firestore.FieldValue.serverTimestamp();
+																			}
+																		});
+
+																		var sorted = Object.values(dbData).sort(function (a, b) {
+																			if (b.timeStamp && a.timeStamp)
+																				return (
+																					new Date(b.timeStamp.toDate()) -
+																					new Date(a.timeStamp.toDate())
+																				);
+																		});
+																		props.setGotToDoCollection(sorted);
+																		window.toDoData = dbData;
+																	});
+															}, 250)
+														);
+												}
+												toggleRepeatable();
+											}}
+											style={{
+												textShadow: " 0 0 5px #lightgreen",
+												color: el.status === 3 ? "lightgreen" : "#DD9999",
+												borderRadius: "50%",
+												backgroundColor: "transparent",
+											}}
+										>
+											Repeats
+										</button>{" "}
 										&nbsp;
 									</div>
 								</div>
@@ -725,9 +795,69 @@ export function TaskerComponent(props) {
 					<br />
 					<br />
 					{props.gotToDoCollection.map((el, index) => {
-						if (el.status === 2) {
+						if (el.status === 2 || el.status === 4) {
 							return (
 								<button
+									onClick={() => {
+										async function ressurectFin() {
+											var db = firebase.firestore();
+											await db
+												.collection("ToDoCollection")
+												.doc(el.title)
+												.set(
+													{
+														status: el.status === 4 ? 3 : el.status === 2 ? 1 : "error",
+														priority: 10,
+														timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
+													},
+													{ merge: true }
+												)
+												.then(
+													setTimeout(() => {
+														db
+															.collection("ToDoCollection")
+															.get()
+															.then((snapshot) => {
+																var dbData = {};
+																snapshot.forEach((doc) => {
+																	var key = doc.id;
+																	var data = doc.data();
+																	data["key"] = key;
+																	dbData[key] = data;
+																});
+																console.log(dbData);
+																var tempVar = "";
+																var tempVar2 = "";
+																var tempVar3 = "";
+																//
+																//
+																window.activeToDoCounter--;
+
+																Object.values(dbData).forEach((el) => {
+																	if (el.timeStamp === null) {
+																		console.log(" ");
+																		console.log(el.title);
+																		console.log(" ");
+																		el.timeStamp =
+																			firebase.firestore.FieldValue.serverTimestamp();
+																	}
+																});
+
+																var sorted = Object.values(dbData).sort(function (a, b) {
+																	if (b.timeStamp && a.timeStamp)
+																		return (
+																			new Date(b.timeStamp.toDate()) -
+																			new Date(a.timeStamp.toDate())
+																		);
+																});
+																props.setGotToDoCollection(sorted);
+																window.toDoData = dbData;
+															});
+													}, 250)
+												);
+										}
+										ressurectFin();
+									}}
 									style={{
 										maxWidth: "100%",
 										wordWrap: "break-word",
@@ -753,7 +883,9 @@ export function TaskerComponent(props) {
 											position: "relative",
 											borderRadius: "50%",
 										}}
-									></div>
+									>
+										{el.count}
+									</div>
 
 									<span style={{ padding: "10px", top: "-10px", position: "relative" }}>
 										{" "}

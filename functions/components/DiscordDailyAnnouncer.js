@@ -76,114 +76,260 @@ module.exports.DiscordDailyAnnouncer = function () {
 										.then((data) => {
 											client.channels.cache.forEach((channelEl) => {
 												// console.log(channelEl.name);
-												if (channelEl.name === "🤖-bot-feed") {
-													async function getWordOfDay() {
+												// 						if (channelEl.name === "🤖-bot-feed") {
+												// 							async function getWordOfDay() {
+												// 								let conjStringRealTimeStories = "";
+												// 								const googleTrends = require("google-trends-api");
+												// 								// googleTrends
+												// 								// 	.realTimeTrends({ geo: "US" })
+												// 								// 	.then(function (results) {
+
+												// 								// var realTimeTrendsVar =
+												// 								// 	JSON.parse(results).storySummaries.trendingStories;
+												// 								// for (let i = 0; i <= 5; i++) {
+												// 								// 	conjStringRealTimeStories += "trendingStories " + [i] + "\n";
+												// 								// 	conjStringRealTimeStories +=
+												// 								// 		realTimeTrendsVar[0].articleTitle + "\n";
+												// 								// 	conjStringRealTimeStories +=
+												// 								// 		realTimeTrendsVar[0].articles[0].url + "\n";
+												// 								// 	conjStringRealTimeStories +=
+												// 								// 		realTimeTrendsVar[0].articles[0].time + "\n";
+												// 								// }
+												// 								//
+
+												// 								googleTrends
+												// 									.dailyTrends({ geo: "US" })
+												// 									.then(function (results) {
+												// 										let conjStringDailyTrends = "";
+												// 										var trendData =
+												// 											JSON.parse(results).default.trendingSearchesDays[0]
+												// 												.trendingSearches;
+												// 										try {
+												// 											for (let i = 0; i <= 5; i++) {
+												// 												conjStringDailyTrends += "Daily Trend " + [i + 1] + "\n";
+												// 												conjStringDailyTrends += trendData[i].title.query + "\n";
+												// 												conjStringDailyTrends += trendData[i].formattedTraffic + "\n";
+												// 											}
+												// 										} catch (error) {
+												// 											conjStringDailyTrends += " Error Getting Trends Data";
+												// 										}
+
+												// 										fetch("https://www.merriam-webster.com/word-of-the-day").then(
+												// 											(res2) => {
+												// 												res2.text().then((dat2) => {
+												// 													const text = dat2
+												// 														.split("h1")[1]
+												// 														.split("h1")[0]
+												// 														.replace(`>`, "")
+												// 														.replace(`</`, "");
+												// 													const text2 = dat2
+												// 														.split("word-syllables")[2]
+												// 														.split("</span>")[0]
+												// 														.replace(`">`, "");
+												// 													const text3 = convert(
+												// 														dat2
+												// 															.split("wod-definition-container")[1]
+												// 															.split("<span")[0]
+												// 															.replace(`">`, "")
+												// 															.replace(`h2>`, "")
+												// 															.replace(`/h2>`, "")
+												// 															.replace(`<`, "")
+												// 															.replace(`<`, ""),
+												// 														{
+												// 															wordwrap: 130,
+												// 														}
+												// 													);
+												// 													setTimeout(() => {
+												// 														channelEl.send(`\n👋👋🏻👋🏼👋🏽👋🏾👋🏿
+												// 											\nHello, everyone!\n${new Date(Date.now())}\n👋👋🏻👋🏼👋🏽👋🏾👋🏿
+												// 						\n **Web Asset Data Results:**
+												// 							${"```"}MicroHawaii.com : 	*${
+												// 															genDBData.GeneratedData.GlobalClickData.microHawaii[0]
+												// 														}*${"```"}${"```"}A-A-Roots.web.app : *${
+												// 															genDBData.GeneratedData.GlobalClickData.aARoots[0]
+												// 														}*${"```"}${"```"}PonoMap.com : 	*${
+												// 															genDBData.GeneratedData.GlobalClickData.PonoMap[0]
+												// 														}*${"```"}**All Tests Have Passed ✓**
+												// 						\n ☀🌞🌇😎🌄🌅🌆🔆=→☀🌞🌇😎🌄🌅🌆🔆=→
+												// 		\n**Quote Of The Day**:${"```"}${
+												// 															data.content
+												// 														}${"```"}📚📚📚📚📚📚📚📚📚📚📚📚📚📚
+												// 		\n **Word Of The Day**:${"```"}${text}${"```"}**Pronounced:**
+												// 		${"```"}${text2}${"```"}**Defined:**
+												// 		${"```"}${text3}${"```"}📈📉📊💹
+												// 		\n**Search Trends Of The Day**:${"```"}${conjStringDailyTrends}${"```"} ⏹⏹⏹⏹⏹⏹END⏹⏹⏹⏹⏹⏹
+												// `);
+												// 													}, 2000);
+												// 												});
+												// 											}
+												// 										);
+												// 										//
+												// 									})
+												// 									.catch(function (err) {
+												// 										console.error("Oh no there was an error", err);
+												// 									});
+												// 							}
+												// 							getWordOfDay();
+												// 						}
+
+												////////////////////////////////////////////////////
+												//////////////     Daily Word    /////////////////
+												////////////////////////////////////////////////////
+												if (channelEl.name === "🤖-daily-words") {
+													setTimeout(() => {
+														fetch("https://www.merriam-webster.com/word-of-the-day").then(
+															(res2) => {
+																res2.text().then((dat2) => {
+																	const text = dat2
+																		.split("h1")[1]
+																		.split("h1")[0]
+																		.replace(`>`, "")
+																		.replace(`</`, "");
+																	const text2 = dat2
+																		.split("word-syllables")[2]
+																		.split("</span>")[0]
+																		.replace(`">`, "");
+																	const text3 = convert(
+																		dat2
+																			.split("wod-definition-container")[1]
+																			.split("<span")[0]
+																			.replace(`">`, "")
+																			.replace(`h2>`, "")
+																			.replace(`/h2>`, "")
+																			.replace(`<`, "")
+																			.replace(`<`, ""),
+																		{
+																			wordwrap: 130,
+																		}
+																	);
+																	channelEl.send(`
+									\n 📚📚📚📚📚📚📚📚📚📚📚📚📚📚
+					\n **Word Of The Day**:
+					\n ${"```"}merriam-webster.com/word-of-the-day/${"```"}
+					${"```"}${text}${"```"}
+					**Pronounced:**
+					${"```"}
+					${text2}
+					${"```"}**Defined:**
+					${"```"}
+					${text3}
+					${"```"}
+			`);
+																});
+															}
+														);
+													}, 3000);
+												}
+
+												////////////////////////////////////////////////////
+												//////////////     Daily Quote    /////////////////
+												////////////////////////////////////////////////////
+												if (channelEl.name === "🤖-daily-quotes") {
+													setTimeout(() => {
+														channelEl.send(`
+														\n ☀🌞🌇😎🌄🌅🌆🔆=→☀🌞🌇😎🌄🌅🌆🔆=→
+														\n**Quote Of The Day**
+														\n
+														\n Quotable.io/random:
+														${"```"}${data.content}${"```"}📚📚📚📚📚📚📚📚📚📚📚📚📚📚
+								`);
+													}, 4000);
+												}
+
+												///////////////////////////////////////////////////
+												//////////////     Daily Stats    /////////////////
+												///////////////////////////////////////////////////
+												if (channelEl.name === "🤖-daily-stats") {
+													setTimeout(() => {
+														channelEl.send(`\n👋👋🏻👋🏼👋🏽👋🏾👋🏿
+														\nHello, everyone!\n${new Date(Date.now())}\n👋👋🏻👋🏼👋🏽👋🏾👋🏿
+									\n **Web Asset Data Results:**
+										${"```"}MicroHawaii.com : 	*${
+															genDBData.GeneratedData.GlobalClickData.microHawaii[0]
+														}*${"```"}${"```"}A-A-Roots.web.app : *${
+															genDBData.GeneratedData.GlobalClickData.aARoots[0]
+														}*${"```"}${"```"}PonoMap.com : 	*${
+															genDBData.GeneratedData.GlobalClickData.PonoMap[0]
+														}*${"```"}**All Tests Have Passed ✓**
+									\n ☀🌞🌇😎🌄🌅🌆🔆=→☀🌞🌇😎🌄🌅🌆🔆=→
+			`);
+													}, 5000);
+												}
+
+												////////////////////////////////////////////////////
+												//////////////     Daily Trends    /////////////////
+												////////////////////////////////////////////////////
+												if (channelEl.name === "🤖-daily-trends") {
+													setTimeout(() => {
 														let conjStringRealTimeStories = "";
 														const googleTrends = require("google-trends-api");
-														googleTrends
-															.realTimeTrends({ geo: "US" })
-															.then(function (results) {
-																var realTimeTrendsVar =
-																	JSON.parse(results).storySummaries.trendingStories;
+														// googleTrends
+														// 	.realTimeTrends({ geo: "US" })
+														// 	.then(function (results) {
 
+														// var realTimeTrendsVar =
+														// 	JSON.parse(results).storySummaries.trendingStories;
+														// for (let i = 0; i <= 5; i++) {
+														// 	conjStringRealTimeStories += "trendingStories " + [i] + "\n";
+														// 	conjStringRealTimeStories +=
+														// 		realTimeTrendsVar[0].articleTitle + "\n";
+														// 	conjStringRealTimeStories +=
+														// 		realTimeTrendsVar[0].articles[0].url + "\n";
+														// 	conjStringRealTimeStories +=
+														// 		realTimeTrendsVar[0].articles[0].time + "\n";
+														// }
+														//
+
+														googleTrends.dailyTrends({ geo: "US" }).then(function (results) {
+															let conjStringDailyTrends = "";
+															var trendData =
+																JSON.parse(results).default.trendingSearchesDays[0]
+																	.trendingSearches;
+															try {
 																for (let i = 0; i <= 5; i++) {
-																	conjStringRealTimeStories += "trendingStories " + [i] + "\n";
-																	conjStringRealTimeStories +=
-																		realTimeTrendsVar[0].articleTitle + "\n";
-																	conjStringRealTimeStories +=
-																		realTimeTrendsVar[0].articles[0].url + "\n";
-																	conjStringRealTimeStories +=
-																		realTimeTrendsVar[0].articles[0].time + "\n";
+																	conjStringDailyTrends += "Daily Trend " + [i + 1] + "\n";
+																	conjStringDailyTrends += trendData[i].title.query + "\n";
+																	conjStringDailyTrends += trendData[i].formattedTraffic + "\n";
 																}
-																//
-
-																googleTrends
-																	.dailyTrends({ geo: "US" })
-																	.then(function (results) {
-																		let conjStringDailyTrends = "";
-																		var trendData =
-																			JSON.parse(results).default.trendingSearchesDays[0]
-																				.trendingSearches;
-																		try {
-																			for (let i = 0; i <= 5; i++) {
-																				conjStringDailyTrends += "dailyTrends " + [i] + "\n";
-																				conjStringDailyTrends += trendData[i].title.query + "\n";
-																				conjStringDailyTrends +=
-																					trendData[i].formattedTraffic + "\n";
-																			}
-																		} catch (error) {
-																			conjStringDailyTrends += " Error Getting Trends Data";
-																		}
-
-																		fetch("https://www.merriam-webster.com/word-of-the-day").then(
-																			(res2) => {
-																				res2.text().then((dat2) => {
-																					const text = dat2
-																						.split("h1")[1]
-																						.split("h1")[0]
-																						.replace(`>`, "")
-																						.replace(`</`, "");
-																					const text2 = dat2
-																						.split("word-syllables")[2]
-																						.split("</span>")[0]
-																						.replace(`">`, "");
-																					const text3 = convert(
-																						dat2
-																							.split("wod-definition-container")[1]
-																							.split("<span")[0]
-																							.replace(`">`, "")
-																							.replace(`h2>`, "")
-																							.replace(`/h2>`, "")
-																							.replace(`<`, "")
-																							.replace(`<`, ""),
-																						{
-																							wordwrap: 130,
-																						}
-																					);
-																					setTimeout(() => {
-																						channelEl.send(`\n👋👋🏻👋🏼👋🏽👋🏾👋🏿
-																	\nHello, everyone!\n${new Date(Date.now())}\n👋👋🏻👋🏼👋🏽👋🏾👋🏿
-													\nThis live, free, web application, named HokuBot, is created with Firebase technology and part of the MicroHawaii open-source software library. All MicroHawaii's open-source software is available at github.com/JasonHoku/
-													\nHokuBot intermittently queries various endpoints to deliver information to the community here.
-													\nTo request an additional query for announcement here, feel free to ask as there is plenty of room for growth.
-												\n **Web Asset Data Results:**
-												${"```"}MicroHawaii.com : 	*${
-																							genDBData.GeneratedData.GlobalClickData.microHawaii[0]
-																						}*${"```"}${"```"}A-A-Roots.web.app : *${
-																							genDBData.GeneratedData.GlobalClickData.aARoots[0]
-																						}*${"```"}${"```"}PonoMap.com : 	*${
-																							genDBData.GeneratedData.GlobalClickData.PonoMap[0]
-																						}*${"```"}**All Tests Have Passed ✓**
-												\n ☀🌞🌇😎🌄🌅🌆🔆=→☀🌞🌇😎🌄🌅🌆🔆=→
-								\n**Quote Of The Day**:${"```"}${
-																							data.content
-																						}${"```"}📚📚📚📚📚📚📚📚📚📚📚📚📚📚
-								\n **Word Of The Day**:${"```"}${text}${"```"}**Pronounced:**
-								${"```"}${text2}${"```"}**Defined:**
-								${"```"}${text3}${"```"}📈📉📊💹
-								\n**Search Trends Of The Day**:${"```"}${conjStringDailyTrends}${"```"} ⏹⏹⏹⏹⏹⏹END⏹⏹⏹⏹⏹⏹
-						`);
-																						setTimeout(() => {
-																							db.collection("Public").doc("DailyDiscord").set(
-																								{
-																									LastRun: admin.firestore.FieldValue.serverTimestamp(),
-																								},
-																								{ merge: true }
-																							);
-																						}, 1000);
-																					}, 2000);
-																				});
-																			}
-																		);
-																	});
-																//
-															})
-															.catch(function (err) {
-																console.error("Oh no there was an error", err);
-															});
-													}
-													getWordOfDay();
+															} catch (error) {
+																conjStringDailyTrends += " Error Getting Trends Data";
+															}
+															channelEl.send(`\n
+														📈📉📊💹
+														\n**Search Trends Of The Day**:${"```"}
+														\n
+														\nGoogle Search USA
+														\n${new Date(Date.now())}
+														${conjStringDailyTrends}${"```"}
+			`);
+														});
+													}, 5000);
 												}
+												////////////////////////////////////////////////////
+												//////////////     Daily Weather    ////////////////
+												////////////////////////////////////////////////////
+												if (channelEl.name === "🤖-daily-weather") {
+													setTimeout(() => {
+														//
+														//
+													}, 6000);
+												}
+
+												////////////////////////////////////////////////////
+												//////////////     End Daily    ////////////////
+												////////////////////////////////////////////////////
+
+												// Set Last Run Time
+												setTimeout(() => {
+													setTimeout(() => {
+														db.collection("Public").doc("DailyDiscord").set(
+															{
+																LastRun: admin.firestore.FieldValue.serverTimestamp(),
+															},
+															{ merge: true }
+														);
+													}, 1000);
+												}, 10000);
 											});
 										});
 								}, 2500);

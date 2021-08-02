@@ -553,9 +553,7 @@ function ModeratorPage() {
 					}
 				}
 			});
-
 			//
-
 			console.log("Load Oncce UseEffect");
 			//
 			gotDailyGenDataRef.current = { LastRun: 0 };
@@ -638,9 +636,9 @@ function ModeratorPage() {
 					console.log(sorted);
 
 					sorted.forEach((el) => {
-						if (el.status === 1) {
+						if (el.status === 1 || el.status === 3) {
 							if (window.activeToDoCounter === undefined) {
-								window.activeToDoCounter = 0;
+								window.activeToDoCounter = 1;
 							} else window.activeToDoCounter++;
 							tempVar += String(el.title + " |$%$|");
 						}
@@ -1226,7 +1224,16 @@ function ModeratorPage() {
 					</span>{" "}
 					<span
 						onClick={() => {
-							toast(<div>Feature Test</div>);
+							let randTodo = Object.values(gotToDoCollection);
+
+							toast(
+								<div>
+									{String(randTodo[Math.floor(Math.random() * randTodo.length)].title)}
+								</div>
+							);
+
+							// alert(randTodo[Math.random() * gotToDoCollection.length]);
+							// toast(<div>Feature Test</div>);
 						}}
 						style={{ position: "relative", margin: "auto" }}
 					>

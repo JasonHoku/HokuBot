@@ -463,9 +463,56 @@ exports.oneHourInterval = functions.pubsub
 	});
 
 exports.DailyDiscordAnnounceFunction = functions.pubsub
-	.schedule("48 10 * * *")
+	.schedule("00 10 * * *")
 	.timeZone("Pacific/Honolulu")
 	.onRun((context) => {
-		const DiscordDailyAnnouncer = require("./components/DiscordDailyAnnouncer");
-		DiscordDailyAnnouncer.DiscordDailyAnnouncer();
+		function RunDailyFunction() {
+			//
+			const DiscordDailyAnnouncer = require("./components/DiscordDailyAnnouncer");
+			DiscordDailyAnnouncer.DiscordDailyAnnouncer();
+
+			//
+
+			function resetDailyTodos() {
+				var db = admin.firestore();
+				var dbData = {};
+				db
+					.collection("ToDoCollection")
+					.get()
+					.then((snapshot) => {
+						snapshot.forEach((doc) => {
+							var key = doc.id;
+							var data = doc.data();
+							data["key"] = key;
+							dbData[key] = data;
+						});
+						//
+
+						if (dbData) {
+							// If status repeatable & finished
+							// set status to active
+							Object.values(dbData).forEach((el) => {
+								if (el.status === 4) {
+									console.log(el.status);
+
+									var db = admin.firestore();
+									db.collection("ToDoCollection").doc(el.title).set(
+										{
+											status: 3,
+											priority: 10,
+											timeStamp: admin.firestore.FieldValue.serverTimestamp(),
+										},
+										{ merge: true }
+									);
+								}
+							});
+						}
+					});
+			}
+			resetDailyTodos();
+
+			//
+			//
+		}
+		RunDailyFunction();
 	});
