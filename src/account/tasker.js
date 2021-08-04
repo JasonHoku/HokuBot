@@ -536,71 +536,73 @@ export function TaskerComponent(props) {
 										&nbsp;
 										<button
 											onClick={() => {
-												var db = firebase.firestore();
-												db
-													.collection("ToDoCollection")
-													.doc(el.title)
-													.delete()
-													.then(
-														db
-															.collection("ToDoCollection")
-															.get()
-															.then((snapshot) => {
-																var dbData = {};
-																snapshot.forEach((doc) => {
-																	var key = doc.id;
-																	var data = doc.data();
-																	data["key"] = key;
-																	dbData[key] = data;
-																});
-																console.log(dbData);
-																var tempVar = "";
-																var tempVar2 = "";
-																var tempVar3 = "";
+												if (window.confirm("Really Delete?")) {
+													var db = firebase.firestore();
+													db
+														.collection("ToDoCollection")
+														.doc(el.title)
+														.delete()
+														.then(
+															db
+																.collection("ToDoCollection")
+																.get()
+																.then((snapshot) => {
+																	var dbData = {};
+																	snapshot.forEach((doc) => {
+																		var key = doc.id;
+																		var data = doc.data();
+																		data["key"] = key;
+																		dbData[key] = data;
+																	});
+																	console.log(dbData);
+																	var tempVar = "";
+																	var tempVar2 = "";
+																	var tempVar3 = "";
 
-																//
-																Object.values(dbData).forEach((el) => {
-																	if (el.timeStamp === null) {
-																		console.log(" ");
-																		console.log(el.title);
-																		console.log(el.title);
-																		console.log(el.title);
-																		console.log(" ");
-																		el.timeStamp = {};
-																		el.timeStamp =
-																			firebase.firestore.FieldValue.serverTimestamp();
-																	}
-																});
-																//
+																	//
+																	Object.values(dbData).forEach((el) => {
+																		if (el.timeStamp === null) {
+																			console.log(" ");
+																			console.log(el.title);
+																			console.log(el.title);
+																			console.log(el.title);
+																			console.log(" ");
+																			el.timeStamp = {};
+																			el.timeStamp =
+																				firebase.firestore.FieldValue.serverTimestamp();
+																		}
+																	});
+																	//
 
-																var sorted = Object.values(dbData).sort(function (a, b) {
-																	if (b.timeStamp && a.timeStamp)
-																		return (
-																			new Date(b.timeStamp.toDate()) -
-																			new Date(a.timeStamp.toDate())
-																		);
-																});
+																	var sorted = Object.values(dbData).sort(function (a, b) {
+																		if (b.timeStamp && a.timeStamp)
+																			return (
+																				new Date(b.timeStamp.toDate()) -
+																				new Date(a.timeStamp.toDate())
+																			);
+																	});
 
-																sorted.forEach((el) => {
-																	if (el.status === 1) {
-																		tempVar += String(el.title + " |$%$|");
-																	}
-																	if (el.status === 0) {
-																		tempVar2 += String(el.title + " |$%$|");
-																	}
+																	sorted.forEach((el) => {
+																		if (el.status === 1) {
+																			tempVar += String(el.title + " |$%$|");
+																		}
+																		if (el.status === 0) {
+																			tempVar2 += String(el.title + " |$%$|");
+																		}
 
-																	if (el.status === 2) {
-																		tempVar3 += String(el.title + " |$%$|");
-																	}
-																});
+																		if (el.status === 2) {
+																			tempVar3 += String(el.title + " |$%$|");
+																		}
+																	});
 
-																props.setGotToDoCollection(sorted);
-																window.todoListAction = tempVar;
-																window.todoList = tempVar2;
-																window.todoListFin = tempVar3;
-																window.toDoData = dbData;
-															})
-													);
+																	props.setGotToDoCollection(sorted);
+																	window.todoListAction = tempVar;
+																	window.todoList = tempVar2;
+																	window.todoListFin = tempVar3;
+																	window.toDoData = dbData;
+																})
+														);
+												}
 											}}
 											style={{
 												textShadow: " 0 0 5px #DD9999",
@@ -624,6 +626,7 @@ export function TaskerComponent(props) {
 															{
 																status: el.status === 1 ? 2 : el.status === 3 ? 4 : "error",
 																priority: 10,
+																count: el.count + 1 || 0,
 																timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
 															},
 															{ merge: true }
@@ -873,22 +876,20 @@ export function TaskerComponent(props) {
 									}}
 									key={`TodoFinButton_${el.title}`}
 								>
-									<div
-										style={{
-											width: "20px",
-											height: "20px",
-											fontSize: "16px",
-											top: "-5px",
-											left: "-5px",
-											position: "relative",
-											borderRadius: "50%",
-										}}
-									>
-										{el.count}
-									</div>
-
-									<span style={{ padding: "10px", top: "-10px", position: "relative" }}>
-										{" "}
+									<span style={{ padding: "10px", position: "relative" }}>
+										<span
+											style={{
+												width: "20px",
+												height: "20px",
+												fontSize: "16px",
+												top: "5px",
+												left: "-5px",
+												position: "absolute",
+												borderRadius: "50%",
+											}}
+										>
+											{el.count === 0 ? "" : el.count}
+										</span>
 										{el.title}
 									</span>
 								</button>

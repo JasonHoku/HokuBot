@@ -468,8 +468,9 @@ exports.DailyDiscordAnnounceFunction = functions.pubsub
 	.onRun((context) => {
 		function RunDailyFunction() {
 			//
-			const DiscordDailyAnnouncer = require("./components/DiscordDailyAnnouncer");
-			DiscordDailyAnnouncer.DiscordDailyAnnouncer();
+
+	const DiscordDailyAnnouncer = require("./components/Discord/DiscordIndex");
+	DiscordDailyAnnouncer.DiscordDailyAnnouncer();
 
 			//
 
@@ -516,3 +517,4 @@ exports.DailyDiscordAnnounceFunction = functions.pubsub
 		}
 		RunDailyFunction();
 	});
+
