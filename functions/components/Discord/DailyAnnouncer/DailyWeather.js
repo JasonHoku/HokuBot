@@ -33,10 +33,10 @@ module.exports.DailyWeather = async function (channelEl, weatherKey) {
 			\n${data.clouds.all}
 			\n
 			\nSunrise:
-			\n${new Date(parseInt(data.sys.sunrise * 1000)).split("(")[0]}
+			\n${new Date(parseInt(data.sys.sunrise * 1000))}
 			\n
 			\nSunset:
-			\n${new Date(parseInt(data.sys.sunset * 1000)).split("(")[0]}
+			\n${new Date(parseInt(data.sys.sunset * 1000))}
 			${"```"}
 			`);
 

@@ -469,8 +469,8 @@ exports.DailyDiscordAnnounceFunction = functions.pubsub
 		function RunDailyFunction() {
 			//
 
-	const DiscordDailyAnnouncer = require("./components/Discord/DiscordIndex");
-	DiscordDailyAnnouncer.DiscordDailyAnnouncer();
+			const DiscordDailyAnnouncer = require("./components/Discord/DiscordIndex");
+			DiscordDailyAnnouncer.DiscordDailyAnnouncer();
 
 			//
 
@@ -517,4 +517,3 @@ exports.DailyDiscordAnnounceFunction = functions.pubsub
 		}
 		RunDailyFunction();
 	});
-
