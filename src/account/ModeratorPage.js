@@ -1547,6 +1547,10 @@ function ModeratorPage() {
 							width: "90%",
 							position: "relative",
 							left: "25px",
+							top: "-35px",
+							height: "25px",
+							border: "1px",
+							color: "white",
 							background:
 								"linear-gradient(to top,rgb(48, 25, 63) 90%,rgb(23, 14, 48) 100%)",
 						}}

@@ -85,7 +85,7 @@ exports.FireFunctionAPI = functions.https.onRequest((req, res) => {
 						}
 					});
 			}
-			getDBData();
+			return getDBData();
 		});
 	} catch (error) {}
 });
