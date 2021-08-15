@@ -147,5 +147,5 @@ module.exports.DiscordDailyAnnouncer = function () {
 			});
 	}
 	getDBData();
-	return null;
+	return false;
 };

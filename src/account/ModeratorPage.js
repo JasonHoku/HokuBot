@@ -1224,14 +1224,19 @@ function ModeratorPage() {
 					</span>{" "}
 					<span
 						onClick={() => {
-							let randTodo = Object.values(gotToDoCollection);
-
-							toast(
-								<div>
-									{String(randTodo[Math.floor(Math.random() * randTodo.length)].title)}
-								</div>
-							);
-
+							let randTodo;
+							function decideActiveToDo() {
+								randTodo =
+									Object.values(gotToDoCollection)[
+										Math.floor(Math.random() * Object.values(gotToDoCollection).length)
+									];
+								if (randTodo.status === 0) {
+									toast(<div>{String(randTodo.title)}</div>);
+								} else {
+									decideActiveToDo();
+								}
+							}
+							decideActiveToDo();
 							// alert(randTodo[Math.random() * gotToDoCollection.length]);
 							// toast(<div>Feature Test</div>);
 						}}

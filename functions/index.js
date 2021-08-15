@@ -463,7 +463,7 @@ exports.oneHourInterval = functions.pubsub
 	});
 
 exports.DailyDiscordAnnounceFunction = functions.pubsub
-	.schedule("00 10 * * *")
+	.schedule("45 08 * * *")
 	.timeZone("Pacific/Honolulu")
 	.onRun((context) => {
 		function RunDailyFunction() {
@@ -475,6 +475,7 @@ exports.DailyDiscordAnnounceFunction = functions.pubsub
 			//
 
 			function resetDailyTodos() {
+				//
 				var db = admin.firestore();
 				var dbData = {};
 				db
