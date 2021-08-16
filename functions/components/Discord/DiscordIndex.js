@@ -1,4 +1,4 @@
-module.exports.DiscordDailyAnnouncer = function () {
+module.exports.DiscordDaily = function () {
 	const { convert } = require("html-to-text");
 	const admin = require("firebase-admin");
 	const Discord = require("discord.js");
@@ -78,9 +78,13 @@ module.exports.DiscordDailyAnnouncer = function () {
 										if (channelEl.name === "🤖-daily-words") {
 											setTimeout(() => {
 												//
-
-												const WordOfTheDay = require("./DailyAnnouncer/WordOfTheDay");
-												WordOfTheDay.WordOfTheDay(fetch, convert, channelEl);
+												try {
+													const WordOfTheDay = require("./DailyAnnouncer/WordOfTheDay");
+													WordOfTheDay.WordOfTheDay(fetch, convert, channelEl);
+												} catch (error) {
+													console.log("Daily Word Error");
+													console.log(error);
+												}
 												//
 											}, 3000);
 										}
@@ -91,9 +95,13 @@ module.exports.DiscordDailyAnnouncer = function () {
 										if (channelEl.name === "🤖-daily-quotes") {
 											setTimeout(() => {
 												//
-												const QuoteOfTheDay = require("./DailyAnnouncer/QuoteOfTheDay");
-												QuoteOfTheDay.QuoteOfTheDay(channelEl);
-
+												try {
+													const QuoteOfTheDay = require("./DailyAnnouncer/QuoteOfTheDay");
+													QuoteOfTheDay.QuoteOfTheDay(channelEl);
+												} catch (error) {
+													console.log("Daily Quote Error");
+													console.log(error);
+												}
 												//
 											}, 4000);
 										}
@@ -103,8 +111,13 @@ module.exports.DiscordDailyAnnouncer = function () {
 										///////////////////////////////////////////////////
 										if (channelEl.name === "🤖-daily-stats") {
 											setTimeout(() => {
-												const FirebaseStats = require("./DailyAnnouncer/FirebaseStats");
-												FirebaseStats.FirebaseStats(channelEl, genDBData);
+												try {
+													const FirebaseStats = require("./DailyAnnouncer/FirebaseStats");
+													FirebaseStats.FirebaseStats(channelEl, genDBData);
+												} catch (error) {
+													console.log("Fire Stats Error");
+													console.log(error);
+												}
 											}, 5000);
 										}
 
@@ -113,11 +126,16 @@ module.exports.DiscordDailyAnnouncer = function () {
 										////////////////////////////////////////////////////
 										if (channelEl.name === "🤖-daily-trends") {
 											setTimeout(() => {
-												const googleTrends = require("google-trends-api");
-												const GoogleTrends = require("./DailyAnnouncer/GoogleTrends");
-												//
-												GoogleTrends.GoogleTrends(googleTrends, channelEl);
-												//
+												try {
+													const googleTrends = require("google-trends-api");
+													const GoogleTrends = require("./DailyAnnouncer/GoogleTrends");
+													//
+													GoogleTrends.GoogleTrends(googleTrends, channelEl);
+													//
+												} catch (error) {
+													console.log("googleTrends Error");
+													console.log(error);
+												}
 											}, 5000);
 										}
 										////////////////////////////////////////////////////
@@ -127,9 +145,14 @@ module.exports.DiscordDailyAnnouncer = function () {
 											setTimeout(() => {
 												//
 
-												const DailyWeather = require("./DailyAnnouncer/DailyWeather");
-												//
-												DailyWeather.DailyWeather(channelEl, dbData.APIKeys.WeatherAPI);
+												try {
+													const DailyWeather = require("./DailyAnnouncer/DailyWeather");
+													//
+													DailyWeather.DailyWeather(channelEl, dbData.APIKeys.WeatherAPI);
+												} catch (error) {
+													console.log("Daily Weather Error");
+													console.log(error);
+												}
 												//
 											}, 6000);
 										}
@@ -142,10 +165,8 @@ module.exports.DiscordDailyAnnouncer = function () {
 							}, 2500);
 					}
 					checkDailyTimer();
-					//
 				});
 			});
 	}
-	getDBData();
-	return false;
+	return getDBData();
 };

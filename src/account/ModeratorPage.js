@@ -47,7 +47,7 @@ let useEmulator = true;
 function ModeratorPage() {
 	const [popoverOpen, setPopoverOpen] = useState(false);
 	const [decideRenderTabs, setDecideRenderTabs] = useState([]);
-	const [tabName, setTabName] = useState("SpriteBuilder");
+	const [tabName, setTabName] = useState("Home");
 	const toggle = () => setPopoverOpen(!popoverOpen);
 
 	const [isTwitchOnline, setIsTwitchOnline] = useState(false);
@@ -963,7 +963,6 @@ function ModeratorPage() {
 			fontFamily: "courier",
 			fontSize: "22px",
 			marginBottom: "2px",
-
 			textAlign: "left",
 			position: "absolute",
 			width: "100%",
@@ -1186,7 +1185,7 @@ function ModeratorPage() {
 					{" "}
 					<span
 						onClick={() => {
-							window.location.reload();
+							setTabName("Home");
 						}}
 						style={{ position: "relative", margin: "auto" }}
 					>
@@ -1259,7 +1258,6 @@ function ModeratorPage() {
 					<span
 						onClick={() => {
 							setTabName("Tasker");
-							document.getElementById("StatisticsInfoId").hidden = true;
 						}}
 						style={{ position: "relative", margin: "auto" }}
 					>
@@ -1268,7 +1266,6 @@ function ModeratorPage() {
 					<span
 						onClick={() => {
 							setTabName("Tasker");
-							document.getElementById("StatisticsInfoId").hidden = true;
 						}}
 						style={{ position: "relative", margin: "auto" }}
 					>
@@ -1314,25 +1311,47 @@ function ModeratorPage() {
 						</span>
 					</span>
 				</div>
-				<span id="StatisticsInfoId" style={styledDivides}>
-					<div style={{ height: "15px", marginLeft: "15px" }}></div>
-					<span
-						style={{
-							marginLeft: "15px",
-						}}
-					>
-						<b>Runs:</b>
-					</span>
-					<span
-						style={{
-							margin: "3px",
-							textShadow: " 0 0 5px #FFDDEE",
-							color: "#FFDDEE",
-						}}
-					>
-						{String(gotFireGeneratedText[2])}
-					</span>
-					<div style={{ height: "15px", marginLeft: "15px" }}></div>{" "}
+				<div
+					hidden={tabName !== "Home"}
+					id="StatisticsInfoId"
+					style={{
+						boxShadow: "0px  2px 3px 3px #221133",
+						fontFamily: "courier",
+						fontSize: "22px",
+						marginBottom: "2px",
+						textAlign: "left",
+						position: "absolute",
+						width: "100%",
+						maxWidth: window.innerWidth,
+						display: tabName === "Home" ? "flex" : "none",
+						flexWrap: "wrap",
+						flexDirection: "row",
+						background:
+							"linear-gradient(to top,rgb(48, 25, 63) 95%,rgb(23, 14, 48) 100%)",
+						zIndex: 1,
+					}}
+				>
+					<div style={{ height: "55px", width: "100%", marginLeft: "15px" }}></div>
+					<br />
+					<div style={{ height: "55px", width: "255px" }}>
+						<span
+							style={{
+								marginLeft: "15px",
+							}}
+						>
+							<b>Runs:</b>
+						</span>
+						<span
+							style={{
+								margin: "3px",
+								textShadow: " 0 0 5px #FFDDEE",
+								color: "#FFDDEE",
+							}}
+						>
+							{String(gotFireGeneratedText[2])}
+						</span>
+					</div>
+					<br /> <div style={{ height: "15px", marginLeft: "15px" }}></div>{" "}
 					<div
 						style={{
 							boxShadow: "0px  2px 3px 3px #221133",
@@ -1494,7 +1513,6 @@ function ModeratorPage() {
 							fontSize: "22px",
 							marginLeft: "15px",
 							marginBottom: "2px",
-
 							maxWidth: "450px",
 							textAlign: "left",
 						}}
@@ -1520,7 +1538,7 @@ function ModeratorPage() {
 							fontSize: "22px",
 							marginLeft: "15px",
 							marginBottom: "2px",
-							height: "150px",
+							height: "225px",
 							textAlign: "left",
 						}}
 					>
@@ -1544,7 +1562,7 @@ function ModeratorPage() {
 					</div>
 					<input
 						style={{
-							width: "90%",
+							width: "80%",
 							position: "relative",
 							left: "25px",
 							top: "-35px",
@@ -1709,8 +1727,19 @@ function ModeratorPage() {
 					></input>
 					<br />
 					<br />
-					<div style={styledDivides}>
-						&nbsp;<b>Last Daily Run:</b>
+					<div
+						style={{
+							boxShadow: "0px  2px 3px 3px #221133",
+							fontFamily: "courier",
+							fontSize: "22px",
+							marginLeft: "15px",
+							marginBottom: "2px",
+							maxWidth: "450px",
+							textAlign: "left",
+							whiteSpace: "pre-line",
+						}}
+					>
+						&nbsp;<b>Todays Stats:</b>
 						<span
 							style={{
 								margin: "3px",
@@ -1721,9 +1750,20 @@ function ModeratorPage() {
 							<span id="LastDailyRunSpan"> </span>
 						</span>
 					</div>
-					s
 					<br />
-					<div style={styledDivides}>
+					<div
+						style={{
+							boxShadow: "0px  2px 3px 3px #221133",
+							fontFamily: "courier",
+							fontSize: "22px",
+							marginLeft: "15px",
+							marginBottom: "2px",
+
+							maxWidth: "450px",
+							textAlign: "left",
+							whiteSpace: "pre-line",
+						}}
+					>
 						&nbsp;<b>Todays Stats:</b>
 						<span
 							style={{
@@ -1750,7 +1790,7 @@ function ModeratorPage() {
 					<br />
 					<br />
 					<br />
-				</span>
+				</div>
 			</span>
 		);
 	}
@@ -2063,7 +2103,6 @@ function ModeratorPage() {
 									<button
 										onClick={() => {
 											setTabName("Tasker");
-											document.getElementById("StatisticsInfoId").hidden = true;
 										}}
 										className="zoom"
 										style={{

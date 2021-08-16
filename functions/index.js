@@ -462,6 +462,7 @@ exports.oneHourInterval = functions.pubsub
 			});
 	});
 
+
 exports.DailyDiscordAnnounceFunction = functions.pubsub
 	.schedule("45 08 * * *")
 	.timeZone("Pacific/Honolulu")
@@ -469,8 +470,8 @@ exports.DailyDiscordAnnounceFunction = functions.pubsub
 		function RunDailyFunction() {
 			//
 
-			const DiscordDailyAnnouncer = require("./components/Discord/DiscordIndex");
-			DiscordDailyAnnouncer.DiscordDailyAnnouncer();
+			const DiscordDaily = require("./components/Discord/DiscordIndex");
+			DiscordDaily.DiscordDaily();
 
 			//
 
