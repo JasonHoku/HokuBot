@@ -1,4 +1,3 @@
-import Draggable from "react-draggable"; // The default
 import firebase from "firebase/app";
 
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
@@ -144,6 +143,7 @@ export function TaskerComponent(props) {
 														}, 250)
 													);
 											}
+											window.activeToDoCounter++;
 											runSetToDoActive();
 										}}
 										style={{
@@ -219,7 +219,7 @@ export function TaskerComponent(props) {
 							boxShadow: "0px  2px 3px 3px #221133",
 						}}
 					>
-						In Action ({window.todoListAction.split("|$%$|").length - 1})
+						In Action ({window.activeToDoCounter})
 					</span>
 					<br />
 					{props.gotToDoCollection.map((el, index) => {
@@ -463,11 +463,11 @@ export function TaskerComponent(props) {
 											}}
 										></TextareaAutosize>
 									</div>
-
 									<div style={{ top: "-15px", position: "relative" }}>
 										<button
 											onClick={() => {
 												async function runTodoStash() {
+													window.activeToDoCounter--;
 													var db = firebase.firestore();
 													db
 														.collection("ToDoCollection")
@@ -600,6 +600,8 @@ export function TaskerComponent(props) {
 																	window.todoList = tempVar2;
 																	window.todoListFin = tempVar3;
 																	window.toDoData = dbData;
+
+																	window.activeToDoCounter--;
 																})
 														);
 												}

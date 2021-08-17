@@ -8,6 +8,8 @@ import { Button, Popover, PopoverBody } from "reactstrap";
 
 import { ImCogs } from "react-icons/im";
 
+import { FaTwitch } from "react-icons/fa";
+
 import { IoCreateOutline } from "react-icons/io5";
 import { IoCloseCircleSharp } from "react-icons/io5";
 import { IoSearchCircleSharp } from "react-icons/io5";
@@ -644,10 +646,12 @@ function ModeratorPage() {
 						}
 						if (el.status === 0) {
 							tempVar2 += String(el.title + " |$%$|");
+							window.stashedToDoCounter++;
 						}
 
-						if (el.status === 2) {
+						if (el.status === 2 || el.status === 2) {
 							tempVar3 += String(el.title + " |$%$|");
+							window.FinToDoCounter++;
 						}
 					});
 					window.todoListAction = tempVar;
@@ -962,7 +966,7 @@ function ModeratorPage() {
 			boxShadow: "0px  2px 3px 3px #221133",
 			fontFamily: "courier",
 			fontSize: "22px",
-			marginBottom: "2px",
+			marginBottom: "15px",
 			textAlign: "left",
 			position: "absolute",
 			width: "100%",
@@ -1245,6 +1249,14 @@ function ModeratorPage() {
 					</span>{" "}
 					<span
 						onClick={() => {
+							alert("XYZ");
+						}}
+						style={{ position: "relative", margin: "auto" }}
+					>
+						<FaTwitch size="35px" />
+					</span>{" "}
+					<span
+						onClick={() => {
 							document.getElementById("HokuModal").hidden = false;
 							document.getElementById("ModalSearchInput").hidden = false;
 							document.getElementById("ModalInput").hidden = true;
@@ -1318,7 +1330,7 @@ function ModeratorPage() {
 						boxShadow: "0px  2px 3px 3px #221133",
 						fontFamily: "courier",
 						fontSize: "22px",
-						marginBottom: "2px",
+						marginBottom: "15px",
 						textAlign: "left",
 						position: "absolute",
 						width: "100%",
@@ -1333,23 +1345,35 @@ function ModeratorPage() {
 				>
 					<div style={{ height: "55px", width: "100%", marginLeft: "15px" }}></div>
 					<br />
-					<div style={{ height: "55px", width: "255px" }}>
-						<span
+					<div
+						style={{
+							height: "55px",
+							width: "255px",
+							boxShadow: "0px  2px 3px 3px #221133",
+							fontFamily: "courier",
+							fontSize: "22px",
+							marginLeft: "15px",
+							marginBottom: "15px",
+							maxWidth: "450px",
+							textAlign: "left",
+						}}
+					>
+						<div
 							style={{
-								marginLeft: "15px",
+								margin: "15px",
 							}}
 						>
 							<b>Runs:</b>
-						</span>
-						<span
-							style={{
-								margin: "3px",
-								textShadow: " 0 0 5px #FFDDEE",
-								color: "#FFDDEE",
-							}}
-						>
-							{String(gotFireGeneratedText[2])}
-						</span>
+							<span
+								style={{
+									margin: "3px",
+									textShadow: " 0 0 5px #FFDDEE",
+									color: "#FFDDEE",
+								}}
+							>
+								{String(gotFireGeneratedText[2])}
+							</span>
+						</div>
 					</div>
 					<br /> <div style={{ height: "15px", marginLeft: "15px" }}></div>{" "}
 					<div
@@ -1358,27 +1382,33 @@ function ModeratorPage() {
 							fontFamily: "courier",
 							fontSize: "22px",
 							marginLeft: "15px",
-							marginBottom: "2px",
+							marginBottom: "15px",
 							maxWidth: "450px",
 							textAlign: "left",
 						}}
 					>
-						<b>Last Response:</b>
-						<span
+						<div
 							style={{
-								margin: "3px",
-								textShadow: " 0 0 5px #FFDDEE",
-								color: "#FFDDEE",
+								margin: "15px",
 							}}
 						>
-							{
-								//FireStore LastBoot Data
-							}
-							{String(new Date(String(gotFireGeneratedText[1])))
-								.replace(" GMT-1000", "")
-								.replace("(Hawaii-Aleutian Standard Time)", "")
-								.replace(" 2021", "")}
-						</span>
+							<b>Last Response:</b>
+							<span
+								style={{
+									margin: "3px",
+									textShadow: " 0 0 5px #FFDDEE",
+									color: "#FFDDEE",
+								}}
+							>
+								{
+									//FireStore LastBoot Data
+								}
+								{String(new Date(String(gotFireGeneratedText[1])))
+									.replace(" GMT-1000", "")
+									.replace("(Hawaii-Aleutian Standard Time)", "")
+									.replace(" 2021", "")}
+							</span>
+						</div>
 					</div>
 					<div style={{ height: "15px" }}></div>
 					<div
@@ -1387,25 +1417,31 @@ function ModeratorPage() {
 							fontFamily: "courier",
 							fontSize: "22px",
 							marginLeft: "15px",
-							marginBottom: "2px",
+							marginBottom: "15px",
 
 							maxWidth: "450px",
 							textAlign: "left",
 						}}
 					>
-						<b>Global Query Countdown:</b>
-						<span
+						<div
 							style={{
-								margin: "3px",
-								textShadow: " 0 0 5px #FFDDEE",
-								color: "#FFDDEE",
+								margin: "15px",
 							}}
 						>
-							{
-								//FireStore NextRun Data
-							}
-							{secondsCountdown}
-						</span>
+							<b>Global Query Countdown:</b>
+							<span
+								style={{
+									margin: "3px",
+									textShadow: " 0 0 5px #FFDDEE",
+									color: "#FFDDEE",
+								}}
+							>
+								{
+									//FireStore NextRun Data
+								}
+								{secondsCountdown}
+							</span>
+						</div>
 					</div>{" "}
 					<div style={{ height: "15px" }}></div>
 					<div
@@ -1414,121 +1450,20 @@ function ModeratorPage() {
 							fontFamily: "courier",
 							fontSize: "22px",
 							marginLeft: "15px",
-							marginBottom: "2px",
+							marginBottom: "15px",
 
 							maxWidth: "450px",
 							textAlign: "left",
 							whiteSpace: "pre-line",
 						}}
 					>
-						<b>Stats:</b>
-					</div>
-					<div style={{ height: "15px" }}></div>
-					<div
-						style={{
-							boxShadow: "0px  2px 3px 3px #221133",
-							fontFamily: "courier",
-							fontSize: "22px",
-							marginLeft: "15px",
-							marginBottom: "2px",
-
-							maxWidth: "450px",
-							textAlign: "left",
-						}}
-					>
-						<b>LeaderBoard:</b>
-						<span
-							style={{
-								margin: "3px",
-								textShadow: " 0 0 5px #FFDDEE",
-								color: "#FFDDEE",
-							}}
-						></span>
-					</div>{" "}
-					<div
-						style={{
-							boxShadow: "0px  2px 3px 3px #221133",
-							fontFamily: "courier",
-							fontSize: "22px",
-							marginLeft: "15px",
-							marginBottom: "2px",
-
-							maxWidth: "450px",
-							textAlign: "left",
-						}}
-					>
-						<div style={{ height: "15px" }}></div>
-						<b>Clicks:</b>
-						<span
+						<div
 							style={{
 								margin: "15px",
-								textShadow: " 0 0 5px #FFDDEE",
-								color: "#FFDDEE",
 							}}
 						>
-							{" "}
-							<FirebaseAppProvider firebaseConfig={firebaseConfig}>
-								<pre
-									style={{
-										whiteSpace: "pre-line",
-										margin: "15px",
-
-										textShadow: " 0 0 5px #FFDDEE",
-										color: "#FFDDEE",
-									}}
-								>
-									<GetGlobalClickStats />
-								</pre>
-							</FirebaseAppProvider>
-						</span>
-					</div>
-					<div
-						style={{
-							boxShadow: "0px  2px 3px 3px #221133",
-							fontFamily: "courier",
-							fontSize: "22px",
-							marginLeft: "15px",
-							marginBottom: "2px",
-
-							maxWidth: "450px",
-							textAlign: "left",
-						}}
-					>
-						<div style={{ height: "15px" }}></div>
-						<b>Action:</b>
-						<span
-							style={{
-								margin: "3px",
-								textShadow: " 0 0 5px #FFDDEE",
-								color: "#FFDDEE",
-							}}
-						>
-							Running
-						</span>
-					</div>
-					<div
-						style={{
-							boxShadow: "0px  2px 3px 3px #221133",
-							fontFamily: "courier",
-							fontSize: "22px",
-							marginLeft: "15px",
-							marginBottom: "2px",
-							maxWidth: "450px",
-							textAlign: "left",
-						}}
-					>
-						<div style={{ height: "15px" }}></div>
-						<b>TTS:</b>
-						<input
-							id="FireReadTTSBoxValue_Copy"
-							style={{
-								margin: "3px",
-								width: "75%",
-								textShadow: " 0 0 5px #FFDDEE",
-								color: "#FFDDEE",
-								backgroundColor: "transparent",
-							}}
-						></input>
+							<b>Stats:</b>
+						</div>
 					</div>
 					<div style={{ height: "15px" }}></div>
 					<div
@@ -1537,7 +1472,140 @@ function ModeratorPage() {
 							fontFamily: "courier",
 							fontSize: "22px",
 							marginLeft: "15px",
-							marginBottom: "2px",
+							marginBottom: "15px",
+
+							maxWidth: "450px",
+							textAlign: "left",
+						}}
+					>
+						<div
+							style={{
+								margin: "15px",
+							}}
+						>
+							<b>LeaderBoard:</b>
+							<span
+								style={{
+									margin: "3px",
+									textShadow: " 0 0 5px #FFDDEE",
+									color: "#FFDDEE",
+								}}
+							></span>
+						</div>{" "}
+					</div>
+					<div
+						style={{
+							boxShadow: "0px  2px 3px 3px #221133",
+							fontFamily: "courier",
+							fontSize: "22px",
+							marginLeft: "15px",
+							marginBottom: "15px",
+
+							maxWidth: "450px",
+							textAlign: "left",
+						}}
+					>
+						<div
+							style={{
+								margin: "15px",
+							}}
+						>
+							<div style={{ height: "15px" }}></div>
+							<b>Clicks:</b>
+							<span
+								style={{
+									margin: "15px",
+									textShadow: " 0 0 5px #FFDDEE",
+									color: "#FFDDEE",
+								}}
+							>
+								{" "}
+								<FirebaseAppProvider firebaseConfig={firebaseConfig}>
+									<pre
+										style={{
+											whiteSpace: "pre-line",
+											margin: "15px",
+
+											textShadow: " 0 0 5px #FFDDEE",
+											color: "#FFDDEE",
+										}}
+									>
+										<GetGlobalClickStats />
+									</pre>
+								</FirebaseAppProvider>
+							</span>{" "}
+						</div>
+					</div>
+					<div
+						style={{
+							boxShadow: "0px  2px 3px 3px #221133",
+							fontFamily: "courier",
+							fontSize: "22px",
+							marginLeft: "15px",
+							marginBottom: "15px",
+
+							maxWidth: "450px",
+							textAlign: "left",
+						}}
+					>
+						<div style={{ height: "15px" }}></div>
+						<div
+							style={{
+								margin: "15px",
+							}}
+						>
+							<b>Action:</b>
+							<span
+								style={{
+									margin: "3px",
+									textShadow: " 0 0 5px #FFDDEE",
+									color: "#FFDDEE",
+								}}
+							>
+								Running
+							</span>
+						</div>{" "}
+					</div>
+					<div
+						style={{
+							boxShadow: "0px  2px 3px 3px #221133",
+							fontFamily: "courier",
+							fontSize: "22px",
+							marginLeft: "15px",
+							marginBottom: "15px",
+							maxWidth: "450px",
+							textAlign: "left",
+						}}
+					>
+						<div style={{ height: "15px" }}></div>
+
+						<div
+							style={{
+								margin: "15px",
+							}}
+						>
+							<b>TTS:</b>
+							<input
+								id="FireReadTTSBoxValue_Copy"
+								style={{
+									margin: "3px",
+									width: "75%",
+									textShadow: " 0 0 5px #FFDDEE",
+									color: "#FFDDEE",
+									backgroundColor: "transparent",
+								}}
+							></input>
+						</div>
+					</div>
+					<div style={{ height: "15px" }}></div>
+					<div
+						style={{
+							boxShadow: "0px  2px 3px 3px #221133",
+							fontFamily: "courier",
+							fontSize: "22px",
+							marginLeft: "15px",
+							marginBottom: "15px",
+							width: "95%",
 							height: "225px",
 							textAlign: "left",
 						}}
@@ -1562,10 +1630,10 @@ function ModeratorPage() {
 					</div>
 					<input
 						style={{
-							width: "80%",
+							width: "90%",
 							position: "relative",
 							left: "25px",
-							top: "-35px",
+							top: "-55px",
 							height: "25px",
 							border: "1px",
 							color: "white",
@@ -1733,22 +1801,28 @@ function ModeratorPage() {
 							fontFamily: "courier",
 							fontSize: "22px",
 							marginLeft: "15px",
-							marginBottom: "2px",
+							marginBottom: "15px",
 							maxWidth: "450px",
 							textAlign: "left",
 							whiteSpace: "pre-line",
 						}}
 					>
-						&nbsp;<b>Todays Stats:</b>
-						<span
+						<div
 							style={{
-								margin: "3px",
-								textShadow: " 0 0 5px #FFDDEE",
-								color: "#FFDDEE",
+								margin: "15px",
 							}}
 						>
-							<span id="LastDailyRunSpan"> </span>
-						</span>
+							&nbsp;<b>Todays Stats:</b>
+							<span
+								style={{
+									margin: "3px",
+									textShadow: " 0 0 5px #FFDDEE",
+									color: "#FFDDEE",
+								}}
+							>
+								<span id="LastDailyRunSpan"> </span>
+							</span>
+						</div>
 					</div>
 					<br />
 					<div
@@ -1757,35 +1831,27 @@ function ModeratorPage() {
 							fontFamily: "courier",
 							fontSize: "22px",
 							marginLeft: "15px",
-							marginBottom: "2px",
-
-							maxWidth: "450px",
+							marginBottom: "15px",
+							maxWidth: "950px",
 							textAlign: "left",
 							whiteSpace: "pre-line",
 						}}
 					>
-						&nbsp;<b>Todays Stats:</b>
-						<span
+						<div
 							style={{
-								margin: "3px",
-								textShadow: " 0 0 5px #FFDDEE",
-								color: "#FFDDEE",
+								margin: "15px",
 							}}
 						>
-							{String("X")}
-						</span>
-					</div>
-					<br />
-					<div style={styledDivides}>
-						&nbsp;<b>Next Daily Countdown:</b>
-						<span
-							id="DailyRunCountdownSpan"
-							style={{
-								margin: "3px",
-								textShadow: " 0 0 5px #FFDDEE",
-								color: "#FFDDEE",
-							}}
-						></span>
+							&nbsp;<b>Next Daily Countdown:</b>
+							<span
+								id="DailyRunCountdownSpan"
+								style={{
+									margin: "3px",
+									textShadow: " 0 0 5px #FFDDEE",
+									color: "#FFDDEE",
+								}}
+							></span>
+						</div>
 					</div>
 					<br />
 					<br />
