@@ -274,6 +274,7 @@ exports.oneMinuteInterval = functions.pubsub
 													.set(
 														{
 															LatestRun: admin.firestore.FieldValue.serverTimestamp(),
+															RunCounter: genDBData.GeneratedData.RunCounter + 1,
 															GlobalClickData: {
 																aARoots: [
 																	content,
@@ -317,6 +318,7 @@ exports.oneMinuteInterval = functions.pubsub
 													.set(
 														{
 															LatestRun: admin.firestore.FieldValue.serverTimestamp(),
+															RunCounter: genDBData.GeneratedData.RunCounter + 1,
 															GlobalClickData: {
 																microHawaii: [
 																	content,
@@ -364,6 +366,7 @@ exports.oneMinuteInterval = functions.pubsub
 													.set(
 														{
 															LatestRun: admin.firestore.FieldValue.serverTimestamp(),
+															RunCounter: genDBData.GeneratedData.RunCounter + 1,
 															GlobalClickData: {
 																PonoMap: [
 																	content,
@@ -461,7 +464,6 @@ exports.oneHourInterval = functions.pubsub
 				}
 			});
 	});
-
 
 exports.DailyDiscordAnnounceFunction = functions.pubsub
 	.schedule("45 08 * * *")

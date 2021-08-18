@@ -558,7 +558,7 @@ function ModeratorPage() {
 			//
 			console.log("Load Oncce UseEffect");
 			//
-			gotDailyGenDataRef.current = { LastRun: 0 };
+			gotDailyGenDataRef.current = { LatestRun: 0 };
 			loadedTotalClicksRef.current = {
 				microHawaii: [0],
 				aARoots: [0],
@@ -572,12 +572,12 @@ function ModeratorPage() {
 				.doc("GeneratedDaily")
 				.get()
 				.then((doc) => {
-					var dbData = Object.assign(doc.data()).LastRun;
+					var dbData = Object.assign(doc.data()).LatestRun;
 
 					var date = String(new Date(dbData.toDate()));
 
 					console.log(date);
-					gotDailyGenDataRef.current.LastRun = date;
+					gotDailyGenDataRef.current.LatestRun = date;
 					document.getElementById("LastDailyRunSpan").innerHTML = String(date)
 						.replace(" GMT-1000", "")
 						.replace("(Hawaii-Aleutian Standard Time)", "")
@@ -706,7 +706,7 @@ function ModeratorPage() {
 						Math.round(
 							(Math.abs(
 								new Date(Date.now()) -
-									new Date(String(gotDailyGenDataRef.current.LastRun))
+									new Date(String(gotDailyGenDataRef.current.LatestRun))
 							) /
 								3600000 -
 								24) *
@@ -759,7 +759,7 @@ function ModeratorPage() {
 								Math.round(
 									(Math.abs(
 										new Date(Date.now()) -
-											new Date(String(gotDailyGenDataRef.current.LastRun))
+											new Date(String(gotDailyGenDataRef.current.LatestRun))
 									) /
 										3600000 -
 										24) *
@@ -770,7 +770,7 @@ function ModeratorPage() {
 							) {
 								db3.collection("Public").doc("GeneratedDaily").set(
 									{
-										LastRun: firebase.firestore.FieldValue.serverTimestamp(),
+										LatestRun: firebase.firestore.FieldValue.serverTimestamp(),
 										GlobalClickData: loadedTotalClicksRef.current,
 									},
 									{ merge: true }
@@ -1347,8 +1347,7 @@ function ModeratorPage() {
 					<br />
 					<div
 						style={{
-							height: "55px",
-							width: "255px",
+							maxHeight: "105px",
 							boxShadow: "0px  2px 3px 3px #221133",
 							fontFamily: "courier",
 							fontSize: "22px",
@@ -1364,6 +1363,7 @@ function ModeratorPage() {
 							}}
 						>
 							<b>Runs:</b>
+							<br />
 							<span
 								style={{
 									margin: "3px",
@@ -1371,7 +1371,9 @@ function ModeratorPage() {
 									color: "#FFDDEE",
 								}}
 							>
-								{String(gotFireGeneratedText[2])}
+								<FirebaseAppProvider firebaseConfig={firebaseConfig}>
+									<GetGeneratedDataRunCount />
+								</FirebaseAppProvider>
 							</span>
 						</div>
 					</div>
@@ -1392,7 +1394,7 @@ function ModeratorPage() {
 								margin: "15px",
 							}}
 						>
-							<b>Last Response:</b>
+							<b>Last Response:</b> <br />
 							<span
 								style={{
 									margin: "3px",
@@ -1428,7 +1430,7 @@ function ModeratorPage() {
 								margin: "15px",
 							}}
 						>
-							<b>Global Query Countdown:</b>
+							<b>Query Countdown:</b> <br />
 							<span
 								style={{
 									margin: "3px",
@@ -1463,6 +1465,20 @@ function ModeratorPage() {
 							}}
 						>
 							<b>Stats:</b>
+							<br />
+							<span
+								style={{
+									textShadow: " 0 0 5px #FFDDEE",
+									color: "#FFDDEE",
+								}}
+							>
+								{window.todoList24h && window.todoList24h.split("$%$").length} Jobs in
+								24hrs
+								<br />
+								WPM
+								<br />
+								Accuracy
+							</span>
 						</div>
 					</div>
 					<div style={{ height: "15px" }}></div>
@@ -1483,14 +1499,21 @@ function ModeratorPage() {
 								margin: "15px",
 							}}
 						>
-							<b>LeaderBoard:</b>
+							<b>LeaderBoard:</b> <br />
 							<span
 								style={{
 									margin: "3px",
 									textShadow: " 0 0 5px #FFDDEE",
 									color: "#FFDDEE",
 								}}
-							></span>
+							>
+								TapGlower
+								<br />
+								TypeStats
+								<br />
+								TypeStats
+								<br />
+							</span>
 						</div>{" "}
 					</div>
 					<div
@@ -2074,13 +2097,26 @@ function ModeratorPage() {
 		} else return "";
 	}
 
-	function GetGeneratedData() {
+	function GetGeneratedDataRunCount() {
 		const docRef = useFirestore().collection("Public").doc("GeneratedData");
 		const { data, status } = useFirestoreDocData(docRef);
 		if (data) {
 			if (status === "success") {
-				if (String(data.RawText).length > 1) {
-					return String(String(data.RawText));
+				if (String(data.RunCounter).length > 1) {
+					return String(String(data.RunCounter));
+				} else {
+					return "Offline ";
+				}
+			}
+		} else return "...";
+	}
+	function GetGeneratedDataLastRun() {
+		const docRef = useFirestore().collection("Public").doc("GeneratedData");
+		const { data, status } = useFirestoreDocData(docRef);
+		if (data) {
+			if (status === "success") {
+				if (String(data.LatestRun).length > 1) {
+					return String(String(data.LatestRun.toDate()));
 				} else {
 					return "Offline ";
 				}
@@ -2418,7 +2454,7 @@ function ModeratorPage() {
 			>
 				<FirebaseAppProvider firebaseConfig={firebaseConfig}>
 					<span hidden={true} id="FireReadBox">
-						<GetGeneratedData />
+						<GetGeneratedDataLastRun />
 					</span>
 					<span hidden={true} id="FireReadTTSBoxValue">
 						<GetGeneratedTTSData />
