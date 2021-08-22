@@ -1249,7 +1249,7 @@ function ModeratorPage() {
 					</span>{" "}
 					<span
 						onClick={() => {
-							alert("XYZ");
+							alert("TTV Settings Coming Soon");
 						}}
 						style={{ position: "relative", margin: "auto" }}
 					>

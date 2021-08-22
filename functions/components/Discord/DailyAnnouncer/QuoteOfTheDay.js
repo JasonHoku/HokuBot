@@ -8,7 +8,10 @@ module.exports.QuoteOfTheDay = async function (channelEl) {
 														\n**Quote Of The Day**
 														\n
 														\n Quotable.io/random:
-														${"```"}${data.content}${"```"}📚📚📚📚📚📚📚📚📚📚📚📚📚📚
+														${"```"}
+														${data.content}
+														\n   -${data.author}
+														${"```"}📚📚📚📚📚📚📚📚📚📚📚📚📚📚
 								`);
 		});
 };
