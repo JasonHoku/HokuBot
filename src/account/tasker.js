@@ -1,9 +1,12 @@
 import firebase from "firebase/app";
 
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
+
 import React, { useState, useEffect, useRef, useCallback } from "react";
 
 import { toast } from "react-toastify";
+
+import { ImPencil2 } from "react-icons/im";
 
 export function TaskerComponent(props) {
 	const [toDoColWidth, setToDoColWidth] = useState("InAction");
@@ -352,8 +355,68 @@ export function TaskerComponent(props) {
 												),
 										}}
 									></TextareaAutosize>
-									<div>
-										{" "}
+									<div
+										id={`minNoteExpansionId${el.title}`}
+										style={{ position: "relative", top: "-15px" }}
+										hidden={
+											document.getElementById(`ActionTaskInput_${el.title}`) &&
+											document.getElementById(`ActionTaskInput_${el.title}`).value
+												.length >= 1
+										}
+									>
+										<button
+											onClick={() => {
+												document.getElementById(
+													`hiddenNoteExpansionId${el.title}`
+												).hidden = false;
+
+												document.getElementById(`hiddenNoteExpansionId${el.title}`).value =
+													" ";
+
+												document.getElementById(
+													`minNoteExpansionId${el.title}`
+												).hidden = true;
+											}}
+											style={{
+												textShadow: " 0 0 5px #DDDDDD",
+												color: "#DDDDDD",
+												top: "-5px",
+												left: "15px",
+												position: "absolute",
+												zIndex: 5,
+												borderRadius: "50%",
+												fontSize: "20px",
+												backgroundColor: "transparent",
+											}}
+										>
+											<span
+												onClick={() => {
+													document.getElementById(
+														`hiddenNoteExpansionId${el.title}`
+													).hidden = false;
+
+													document.getElementById(`hiddenNoteExpansionId${el.title}`).value =
+														" ";
+
+													document.getElementById(
+														`minNoteExpansionId${el.title}`
+													).hidden = true;
+												}}
+											>
+												<ImPencil2 color="black" size="15" />
+											</span>
+										</button>
+									</div>
+									<div style={{ height: "25px" }}></div>
+									<div
+										id={`hiddenNoteExpansionId${el.title}`}
+										style={{ marginTop: "-40px", marginBottom: "-25px" }}
+										hidden={
+											document.getElementById(`ActionTaskInput_${el.title}`) &&
+											document.getElementById(`ActionTaskInput_${el.title}`).value.length <
+												1
+										}
+									>
 										<button
 											onClick={() => {
 												toast(
@@ -600,7 +663,6 @@ export function TaskerComponent(props) {
 																	window.todoList = tempVar2;
 																	window.todoListFin = tempVar3;
 																	window.toDoData = dbData;
-
 																	window.activeToDoCounter--;
 																})
 														);

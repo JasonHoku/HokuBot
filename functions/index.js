@@ -469,7 +469,7 @@ exports.DailyDiscordAnnounceFunction = functions.pubsub
 	.schedule("45 08 * * *")
 	.timeZone("Pacific/Honolulu")
 	.onRun((context) => {
-		function RunDailyFunction() {
+		async function RunDailyFunction() {
 			//
 
 			const DiscordDaily = require("./components/Discord/DiscordIndex");

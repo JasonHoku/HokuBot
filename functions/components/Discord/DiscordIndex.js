@@ -23,15 +23,16 @@ module.exports.DiscordDaily = function () {
 				//Begin Development With ENV Variables
 				const client = new Discord.Client();
 				const data = [];
-				//Login To DiscordAPI
+				//Login To DiscordAP
+				console.log("|D| Discord Logging In");
 				client.login(DiscordAPI);
 				// Log When Ready
 				client.on("ready", () => {
 					console.log(`|D| Logged in as ${client.user.tag}!`);
 					///Find User and Send Message
-					const list = client.users.cache.find(
-						(user) => user.username === "JasonHoku"
-					);
+					// const list = client.users.cache.find(
+					// 	(user) => user.username === "JasonHoku"
+					// );
 
 					async function checkDailyTimer() {
 						var genDBData = {};
@@ -154,6 +155,8 @@ module.exports.DiscordDaily = function () {
 													console.log(error);
 												}
 												//
+
+												return false;
 											}, 6000);
 										}
 
@@ -168,5 +171,5 @@ module.exports.DiscordDaily = function () {
 				});
 			});
 	}
-	return getDBData();
+	getDBData();
 };
