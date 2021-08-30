@@ -383,7 +383,7 @@ export function TaskerComponent(props) {
 												top: "-5px",
 												left: "15px",
 												position: "absolute",
-												zIndex: 5,
+												zIndex: 0,
 												borderRadius: "50%",
 												fontSize: "20px",
 												backgroundColor: "transparent",

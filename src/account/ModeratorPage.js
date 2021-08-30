@@ -10,6 +10,10 @@ import { ImCogs } from "react-icons/im";
 
 import { FaTwitch } from "react-icons/fa";
 
+import { FiSave } from "react-icons/fi";
+
+import TextareaAutosize from "@material-ui/core/TextareaAutosize";
+
 import { IoCreateOutline } from "react-icons/io5";
 import { IoCloseCircleSharp } from "react-icons/io5";
 import { IoSearchCircleSharp } from "react-icons/io5";
@@ -64,11 +68,16 @@ function ModeratorPage() {
 
 	const [gotFireGeneratedText, setGotFireGeneratedText] = useState("");
 	const [typeGameCorrect, setTypeGameCorrect] = useState(true);
+	const [gotTTVSettingsState, setGotTTVSettingsState] = useState(true);
+	const [TTVSettingsTab, setTTVSettingsTab] = useState("Announcements");
 
 	const isInitialMount = useRef(true);
 	const typeGameCounterRef = useRef(true);
 	const loadedTotalClicksRef = useRef(true);
 	const gotDailyGenDataRef = useRef({});
+	const hasLoadedTTVSettings = useRef(false);
+	const isSaveActive = useRef(false);
+	const saveDampenerTimer = useRef(0);
 
 	const auth = firebase.auth();
 
@@ -241,6 +250,355 @@ function ModeratorPage() {
 		auth.currentUser.uid,
 	]);
 	//
+
+	function decideTTVSettings() {
+		var tempArray = [];
+		if (
+			document.getElementById("HokuModalDescription") &&
+			document.getElementById("HokuModalDescription").innerHTML ===
+				"Adjusting TTV Settings"
+		) {
+			if (!hasLoadedTTVSettings.current) {
+				let dbData = {};
+				async function getFSData() {
+					if (hasLoadedTTVSettings.current === false) {
+						hasLoadedTTVSettings.current = true;
+						var db = firebase.firestore();
+						db
+							.collection("Public")
+							.get()
+							.then((snapshot) => {
+								snapshot.forEach((doc) => {
+									var key = doc.id;
+									var data = doc.data();
+									data["key"] = key;
+									dbData[key] = data;
+								});
+
+								Object.entries(dbData.TwitchAnnouncements).forEach((el, index) => {
+									// var newDivArr = document.createElement("div");
+									// var newInputArr = (
+									// );
+									// newDivArr.style.textAlign = "center";
+									// newDivArr.innerHTML = newInputArr;
+									// document.getElementById("TTVSettingsID").appendChild(newDivArr);
+									if (el[0] !== "key")
+										tempArray.push(
+											<TextareaAutosize
+												id={"TTVAnnSett_" + el[1]}
+												key={"TTVAnnSett_" + el[1]}
+												type="textarea"
+												defaultValue={el[1]}
+												onChange={(e) => {
+													if (!isSaveActive.current) {
+														var ttvdbData = {};
+														var db = firebase.firestore();
+														db
+															.collection("Public")
+															.get()
+															.then((snapshot) => {
+																snapshot.forEach((doc) => {
+																	var key = doc.id;
+																	var data = doc.data();
+																	data["key"] = key;
+																	ttvdbData[key] = data;
+																});
+
+																var tempArray = [];
+																Object.entries(ttvdbData.TwitchAnnouncements).forEach(
+																	(el2, index2) => {
+																		if (index === index2) {
+																			console.log("XYZ");
+																			console.log(el2);
+																			console.log(el[0]);
+																			console.log(index);
+																			console.log(e.target.value);
+																			console.log(ttvdbData.TwitchAnnouncements);
+																			console.log("XYZ");
+
+																			var db3 = firebase.firestore();
+																			db3
+																				.collection("Public")
+																				.doc("TwitchAnnouncements")
+																				.set(
+																					{
+																						[el[0]]: e.target.value,
+																					},
+																					{ merge: true }
+																				)
+																				.then((data, error) => {
+																					if (!error) {
+																						toast(
+																							<div style={{ backgroundColor: "110011" }}>
+																								<div style={{ backgroundColor: "110011" }}>
+																									<h1>Auto Saved!</h1>
+																									<h2>Success!</h2>
+																								</div>
+																								<div>
+																									<h2>Annoucement # {index} </h2>
+																									{e.target.value}
+																								</div>
+																								<div>XYZ</div>
+																							</div>
+																						);
+																						isSaveActive.current = true;
+																					}
+																				});
+																		}
+																	}
+																);
+															});
+													}
+													// console.log(" ");
+													// console.log(e.target.value);
+													setTimeout(() => {
+														isSaveActive.current = false;
+													}, 5000);
+												}}
+												rowsMin={2}
+												style={{
+													margin: "3px",
+													width: "70%",
+													position: "relative",
+													backgroundColor: "transparent",
+													textShadow: " 0 0 5px #CCFFCC",
+													color: "#CCFFCC",
+													borderRadius: "5%",
+													fontSize: "22px",
+													marginBottom: "-5px",
+													marginTop: "-15px",
+												}}
+											/>
+										);
+									setGotTTVSettingsState(tempArray);
+								});
+							});
+					}
+				}
+				getFSData().then((data) => {
+					hasLoadedTTVSettings.current = true;
+				});
+			}
+		}
+		if (
+			document.getElementById("HokuModalDescription") &&
+			gotTTVSettingsState.length > 1 &&
+			document.getElementById("HokuModalDescription").innerHTML ===
+				"Adjusting TTV Settings"
+		)
+			return (
+				<div style={{ textAlign: "center" }}>
+					<button
+						onClick={() => {
+							setTTVSettingsTab("Announcements");
+						}}
+						style={{
+							textShadow: " 0 0 5px #6666ff",
+							color: TTVSettingsTab === "Announcements" ? "white" : "#6666ff",
+							top: "-10px",
+							position: "relative",
+							borderRadius: "5px",
+							fontSize: "20px",
+							backgroundColor: "transparent",
+						}}
+					>
+						Announcements
+					</button>
+					&nbsp;
+					<button
+						onClick={() => {
+							setTTVSettingsTab("Commands");
+						}}
+						style={{
+							textShadow: " 0 0 5px #6666ff",
+							color: TTVSettingsTab === "Commands" ? "white" : "#6666ff",
+							top: "-10px",
+							position: "relative",
+							borderRadius: "5px",
+							fontSize: "20px",
+							backgroundColor: "transparent",
+						}}
+					>
+						Commands
+					</button>
+					&nbsp;
+					<button
+						style={{
+							textShadow: " 0 0 5px #6666ff",
+							color: "#6666ff",
+							top: "-10px",
+							position: "relative",
+							borderRadius: "5px",
+							fontSize: "20px",
+							backgroundColor: "transparent",
+						}}
+					>
+						X
+					</button>
+					&nbsp;
+					<div hidden={TTVSettingsTab !== "Announcements"}>
+						<br />
+						<br />
+						<button
+							style={{
+								textShadow: " 0 0 5px #CCFFCC",
+								color: "#CCFFCC",
+								top: "-10px",
+								position: "relative",
+								borderRadius: "5px",
+								fontSize: "20px",
+								backgroundColor: "transparent",
+							}}
+						>
+							<span style={{ position: "relative", top: "1px", left: "" }}>
+								Save All{" "}
+								<span style={{ position: "relative", top: "2px", left: "" }}>
+									<FiSave />
+								</span>
+							</span>
+						</button>{" "}
+						<br />
+						&nbsp; Announce Every{" "}
+						<input
+							defaultValue={10}
+							type="number"
+							style={{
+								height: "35px",
+								width: "55px",
+								backgroundColor: "transparent",
+								position: "relative",
+								textShadow: " 0 0 5px #CCFFCC",
+								color: "#CCFFCC",
+								borderRadius: "5%",
+								fontSize: "22px",
+								marginBottom: "25px",
+							}}
+						/>{" "}
+						Minutes
+						<br />
+						{gotTTVSettingsState.map((el) => {
+							return el;
+						})}
+						<br />
+						<button
+							style={{
+								textShadow: " 0 0 5px #DDDDDD",
+								color: "#DDDDDD",
+								top: "-10px",
+								position: "relative",
+								borderRadius: "50%",
+								fontSize: "20px",
+								backgroundColor: "transparent",
+							}}
+							onClick={() => {
+								var tempArray = [];
+								gotTTVSettingsState.forEach((el) => {
+									tempArray.push(el);
+								});
+								tempArray.push(
+									<TextareaAutosize
+										id={"TTVAnnSett_" + gotTTVSettingsState.length}
+										key={"TTVAnnSett_" + gotTTVSettingsState.length}
+										type="textarea"
+										defaultValue={""}
+										onChange={(e) => {
+											let docLength = Object.entries(gotTTVSettingsState).length;
+
+											if (!isSaveActive.current) {
+												var ttvdbData = {};
+												var db = firebase.firestore();
+												db
+													.collection("Public")
+													.get()
+													.then((snapshot) => {
+														snapshot.forEach((doc) => {
+															var key = doc.id;
+															var data = doc.data();
+															data["key"] = key;
+															ttvdbData[key] = data;
+														});
+
+														var tempArray = [];
+
+														console.log("XYZ");
+														console.log(e.target.value);
+														console.log(ttvdbData.TwitchAnnouncements);
+														console.log("XYZ");
+
+														var db3 = firebase.firestore();
+														db3
+															.collection("Public")
+															.doc("TwitchAnnouncements")
+															.set(
+																{
+																	[String(docLength)]: e.target.value,
+																},
+																{ merge: true }
+															)
+															.then((data, error) => {
+																if (!error) {
+																	toast(
+																		<div>
+																			<div>
+																				<h1>Auto Saved!</h1>
+																				<h2>Success!</h2>
+																			</div>
+																			<div>
+																				<h2>
+																					Annoucement # {ttvdbData.TwitchAnnouncements.length}{" "}
+																				</h2>
+																				{e.target.value}
+																			</div>
+																			<div>XYZ</div>
+																		</div>
+																	);
+																	isSaveActive.current = true;
+																}
+															});
+													});
+											}
+											// console.log(" ");
+											// console.log(e.target.value);
+											setTimeout(() => {
+												isSaveActive.current = false;
+											}, 5000);
+										}}
+										rowsMin={2}
+										style={{
+											margin: "3px",
+											width: "70%",
+											textShadow: " 0 0 5px #CCFFCC",
+											color: "#CCFFCC",
+											position: "relative",
+											backgroundColor: "transparent",
+											borderRadius: "5%",
+											fontSize: "22px",
+											marginBottom: "-20px",
+											marginTop: "-20px",
+										}}
+									/>
+								);
+								console.log(document.getElementById("HokuModal").style.height);
+								document.getElementById("HokuModal").style.height =
+									parseInt(
+										document.getElementById("HokuModal").style.height.split("px")[0]
+									) +
+									100 +
+									"px";
+								console.log(document.getElementById("HokuModal").style.height);
+
+								setGotTTVSettingsState(tempArray);
+							}}
+						>
+							{" "}
+							+{" "}
+						</button>
+					</div>
+					<div hidden={TTVSettingsTab !== "Commands"}>Coming Soon</div>
+				</div>
+			);
+	}
+
 	const getMicroHawaiiData = useCallback(() => {
 		let useEmulator = false;
 		require("firebase/functions");
@@ -556,7 +914,9 @@ function ModeratorPage() {
 				}
 			});
 			//
-			console.log("Load Oncce UseEffect");
+			console.log("Load Once UseEffect");
+			//
+			hasLoadedTTVSettings.current = false;
 			//
 			gotDailyGenDataRef.current = { LatestRun: 0 };
 			loadedTotalClicksRef.current = {
@@ -1013,6 +1373,8 @@ function ModeratorPage() {
 						<span
 							onClick={() => {
 								document.getElementById("HokuModal").hidden = true;
+								document.getElementById("HokuModal").style.height =
+									window.innerHeight - 250;
 							}}
 						>
 							<IoCloseCircleSharp />
@@ -1029,6 +1391,8 @@ function ModeratorPage() {
 						Creating To Do
 					</div>
 
+					<div style={{ height: "35px" }}></div>
+					<div id="TTVSettingsID">{decideTTVSettings()}</div>
 					<div style={{ height: "35px" }}></div>
 					<div
 						style={{
@@ -1249,7 +1613,14 @@ function ModeratorPage() {
 					</span>{" "}
 					<span
 						onClick={() => {
-							alert("TTV Settings Coming Soon");
+							document.getElementById("HokuModal").hidden = false;
+							document.getElementById("ModalSearchInput").hidden = false;
+							document.getElementById("ModalInput").hidden = true;
+							document.getElementById("ModalSearchInput").hidden = true;
+							document.getElementById("HokuModalDescription").innerHTML =
+								"Adjusting TTV Settings";
+							document.getElementById("HokuModal").style.height =
+								window.innerHeight - 150 + "px";
 						}}
 						style={{ position: "relative", margin: "auto" }}
 					>
@@ -1523,7 +1894,6 @@ function ModeratorPage() {
 							fontSize: "22px",
 							marginLeft: "15px",
 							marginBottom: "15px",
-
 							maxWidth: "450px",
 							textAlign: "left",
 						}}
@@ -1892,7 +2262,7 @@ function ModeratorPage() {
 		async function sendRequest(props) {
 			//Emulator local url for development:
 			let fetchURL = "";
-			const urlLocal = `http://localhost:5002/hokubot/us-central1/FireFunctionAPI`;
+			const urlLocal = `http://localhost:5122/hokubot/us-central1/FireFunctionAPI`;
 
 			// Quickly Toggle Between Emulator & Live Functions (Detects Localhost)
 
@@ -1939,7 +2309,7 @@ function ModeratorPage() {
 		async function sendRequest(props) {
 			//Emulator local url for development:
 			let fetchURL = "";
-			const urlLocal = `http://localhost:5002/hokubot/us-central1/FireFunctionShutDown`;
+			const urlLocal = `http://localhost:5122/hokubot/us-central1/FireFunctionShutDown`;
 
 			//Live  url:
 			const urlLive =
@@ -2072,7 +2442,6 @@ function ModeratorPage() {
 			}
 		} else return "";
 	}
-
 	function GetGlobalClickStats() {
 		const docRef = useFirestore().collection("Public").doc("GeneratedData");
 		const { data, status, error } = useFirestoreDocData(docRef);
@@ -2083,7 +2452,15 @@ function ModeratorPage() {
 			if (status === "success") {
 				if (String(data.Stats).length > 1) {
 					return String(
-						" AAR:" +
+						"Total: " +
+							String(
+								parseInt(
+									data.GlobalClickData.aARoots[0] +
+										data.GlobalClickData.PonoMap[0] +
+										data.GlobalClickData.microHawaii[0]
+								)
+							) +
+							"\r\n \r\n AAR:" +
 							String(data.GlobalClickData.aARoots) +
 							"\r\nPM:" +
 							String(data.GlobalClickData.PonoMap) +

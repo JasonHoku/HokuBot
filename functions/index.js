@@ -5,7 +5,7 @@ const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 admin.initializeApp();
 
-console.log("Initiating Hoku Bot In Offline Mode");
+console.log("Initiating Hoku Bot Framework");
 
 exports.FireFunctionAPI = functions.https.onRequest((req, res) => {
 	let twitchClientId = "";
@@ -66,12 +66,11 @@ exports.FireFunctionAPI = functions.https.onRequest((req, res) => {
 									);
 								}
 								//Launch Discord API
-								const DiscordTools = require("./components/DiscordTools");
-								DiscordTools.DiscordTools((userID = { userID }));
+								// const DiscordTools = require("./components/DiscordTools");
+								// DiscordTools.DiscordTools((userID = { userID }));
 								//Launch TwitchAPI API
 								const TwitchTools = require("./components/TwitchTools");
 								TwitchTools.TwitchTools((userID = { userID }));
-
 								setAPIsOnline();
 								//
 							} else {
@@ -389,135 +388,136 @@ exports.oneMinuteInterval = functions.pubsub
 		buildGeneratedData();
 	});
 
-exports.oneHourInterval = functions.pubsub
-	.schedule("every 60 minutes")
-	.onRun(() => {
-		var genDBData = {};
-		var dbData = {};
-		let todoList = "";
-		let todoListFin = "";
-		var db = admin.firestore();
-		db
-			.collection("Secrets")
-			.get()
-			.then((snapshot) => {
-				snapshot.forEach((doc) => {
-					var key = doc.id;
-					var data = doc.data();
-					data["key"] = key;
-					dbData[key] = data;
-				});
+// exports.oneHourInterval = functions.pubsub
+// 	.schedule("every 60 minutes")
+// 	.onRun(() => {
+// 		var genDBData = {};
+// 		var dbData = {};
+// 		let todoList = "";
+// 		let todoListFin = "";
+// 		var db = admin.firestore();
+// 		db
+// 			.collection("Secrets")
+// 			.get()
+// 			.then((snapshot) => {
+// 				snapshot.forEach((doc) => {
+// 					var key = doc.id;
+// 					var data = doc.data();
+// 					data["key"] = key;
+// 					dbData[key] = data;
+// 				});
 
-				if (dbData.MetaData.FireConnected) {
-					//    console.log("||| Connection True");
-					let listArray = [];
-					let listArray2 = [];
-					//    console.log("||| Building GeneratedData");
+// 				if (dbData.MetaData.FireConnected) {
+// 					//    console.log("||| Connection True");
+// 					let listArray = [];
+// 					let listArray2 = [];
+// 					//    console.log("||| Building GeneratedData");
 
-					//Got Secrets then Build Public Data
-					var db = admin.firestore();
-					db
-						.collection("Users")
-						.doc(String(dbData.Admins[0]))
-						.get()
-						.then((doc) => {
-							todoList = JSON.parse(JSON.stringify(doc.data())).Todo;
-							todoList.forEach((todo) => listArray.push(String(todo + " ")));
-							//
-							todoListFin = JSON.parse(JSON.stringify(doc.data())).TodoFin;
-							todoListFin.forEach((todo) => listArray2.push(String(todo + " ")));
-							//Got Admin ToDo Now Generate Text
-							async function sendGeneratedData() {
-								db
-									.collection("Public")
-									.get()
-									.then((snapshot2) => {
-										snapshot2.forEach((doc2) => {
-											var key = doc2.id;
-											var data = doc2.data();
-											data["key"] = key;
-											genDBData[key] = data;
-										});
+// 					//Got Secrets then Build Public Data
+// 					var db = admin.firestore();
+// 					db
+// 						.collection("Users")
+// 						.doc(String(dbData.Admins[0]))
+// 						.get()
+// 						.then((doc) => {
+// 							todoList = JSON.parse(JSON.stringify(doc.data())).Todo;
+// 							todoList.forEach((todo) => listArray.push(String(todo + " ")));
+// 							//
+// 							todoListFin = JSON.parse(JSON.stringify(doc.data())).TodoFin;
+// 							todoListFin.forEach((todo) => listArray2.push(String(todo + " ")));
+// 							//Got Admin ToDo Now Generate Text
+// 							async function sendGeneratedData() {
+// 								db
+// 									.collection("Public")
+// 									.get()
+// 									.then((snapshot2) => {
+// 										snapshot2.forEach((doc2) => {
+// 											var key = doc2.id;
+// 											var data = doc2.data();
+// 											data["key"] = key;
+// 											genDBData[key] = data;
+// 										});
 
-										var date = genDBData.DailyYoutube.LastRun.toDate();
+// 										var date = genDBData.DailyYoutube.LastRun.toDate();
 
-										if (
-											Math.round(
-												(Math.abs(new Date(Date.now()) - new Date(String(date))) / 3600000 -
-													24) *
-													10000
-											) /
-												10000 >=
-											0
-										) {
-											const YouTubeTools = require("./components/YouTubeData");
-											YouTubeTools.YouTubeTools();
-										}
-										//
+// 										if (
+// 											Math.round(
+// 												(Math.abs(new Date(Date.now()) - new Date(String(date))) / 3600000 -
+// 													24) *
+// 													10000
+// 											) /
+// 												10000 >=
+// 											0
+// 										) {
+// 											// const YouTubeTools = require("./components/YouTubeData");
+// 											// YouTubeTools.YouTubeTools();
+// 										}
+// 										//
 
-										const DiscordTools = require("./components/DiscordTools");
-										DiscordTools.DiscordTools({ userID: dbData.Admins[0] });
-									});
-							}
-							sendGeneratedData();
-						});
-				}
-			});
-	});
+// 										// const DiscordTools = require("./components/DiscordTools");
+// 										// DiscordTools.DiscordTools({ userID: dbData.Admins[0] });
+// 									});
+// 							}
+// 							sendGeneratedData();
+// 						});
+// 				}
+// 			});
+// 	});
 
-exports.DailyDiscordAnnounceFunction = functions.pubsub
+exports.MorningDailyFun = functions.pubsub
 	.schedule("45 08 * * *")
 	.timeZone("Pacific/Honolulu")
-	.onRun((context) => {
-		async function RunDailyFunction() {
-			//
-
+	.onRun(() => {
+		//
+		DailyDiscordAnnounceFunction();
+		//
+		async function DailyDiscordAnnounceFunction() {
 			const DiscordDaily = require("./components/Discord/DiscordIndex");
-			DiscordDaily.DiscordDaily();
-
-			//
-
-			function resetDailyTodos() {
-				//
-				var db = admin.firestore();
-				var dbData = {};
-				db
-					.collection("ToDoCollection")
-					.get()
-					.then((snapshot) => {
-						snapshot.forEach((doc) => {
-							var key = doc.id;
-							var data = doc.data();
-							data["key"] = key;
-							dbData[key] = data;
-						});
-						//
-
-						if (dbData) {
-							// If status repeatable & finished
-							// set status to active
-							Object.values(dbData).forEach((el) => {
-								if (el.status === 4) {
-									console.log(el.status);
-
-									var db = admin.firestore();
-									db.collection("ToDoCollection").doc(el.title).set(
-										{
-											status: 3,
-											priority: 10,
-											timeStamp: admin.firestore.FieldValue.serverTimestamp(),
-										},
-										{ merge: true }
-									);
-								}
-							});
-						}
-					});
-			}
-			resetDailyTodos();
-
-			//
-			//
+			return DiscordDaily.DiscordDaily();
 		}
-		RunDailyFunction();
+		//
+
+		resetDailyTodos();
+		//
+		//
+
+		function resetDailyTodos() {
+			//
+			var db = admin.firestore();
+			var dbData = {};
+			db
+				.collection("ToDoCollection")
+				.get()
+				.then((snapshot) => {
+					snapshot.forEach((doc) => {
+						var key = doc.id;
+						var data = doc.data();
+						data["key"] = key;
+						dbData[key] = data;
+					});
+					//
+
+					if (dbData) {
+						// If status repeatable & finished
+						// set status to active
+						Object.values(dbData).forEach((el) => {
+							if (el.status === 4) {
+								console.log(el.status);
+
+								var db = admin.firestore();
+								db.collection("ToDoCollection").doc(el.title).set(
+									{
+										status: 3,
+										priority: 10,
+										timeStamp: admin.firestore.FieldValue.serverTimestamp(),
+									},
+									{ merge: true }
+								);
+							}
+						});
+					}
+				});
+		}
+		//
+		//
 	});
