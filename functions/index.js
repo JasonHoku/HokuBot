@@ -168,6 +168,159 @@ exports.FireFunctionShutDown = functions.https.onRequest((req, res) => {
 	} catch (error) {}
 });
 
+exports.StartTwitchBot = functions.https.onRequest((req, res) => {
+	let twitchClientId = "";
+	let twitchClientAccess = "";
+	var dbData = {};
+	let userID = {};
+
+	res.status(200);
+	const cors = require("cors")({ origin: true });
+	res.set("Access-Control-Allow-Origin", "*");
+	res.set("Access-Control-Allow-Headers", "Content-Type");
+	try {
+		let runOnce = 0;
+		//Declare CORs Rules
+		const cors = require("cors")({ origin: true });
+		res.status(200);
+		res.set("Access-Control-Allow-Origin", "*");
+		res.set("Access-Control-Allow-Headers", "Content-Type");
+		cors(req, res, () => {
+			const cors = require("cors")({ origin: true });
+			res.status(200);
+			res.set("Access-Control-Allow-Origin", "*");
+			res.set("Access-Control-Allow-Headers", "Content-Type");
+			const gotUID = JSON.parse(req.headers["headertokens"]).uid;
+			userID = JSON.parse(req.headers["headertokens"]).uid;
+			const gotHeaders = JSON.stringify(req.headers["headertokens"]);
+
+			async function getDBData() {
+				var db = admin.firestore();
+				db
+					.collection("Secrets")
+					.get()
+					.then((snapshot) => {
+						snapshot.forEach((doc) => {
+							var key = doc.id;
+							var data = doc.data();
+							data["key"] = key;
+							dbData[key] = data;
+						});
+						//Development block for localhost emulator
+
+						//Begin Auth Comparison
+						if (String(gotUID) === String(dbData.Admins[0])) {
+							if (!dbData.MetaData.TwitchOn) {
+								//Successful Admin UID
+								res.send(JSON.stringify("Welcome Admin"));
+								//Begin Twitch API Connection & Functions
+								async function setAPIsOnline() {
+									var db3 = admin.firestore();
+									db3.collection("Secrets").doc("MetaData").set(
+										{
+											TwitchOn: true,
+										},
+										{ merge: true }
+									);
+								}
+								//Launch TwitchAPI API
+								const TwitchTools = require("./components/TwitchTools");
+								TwitchTools.TwitchTools((userID = { userID }));
+								setAPIsOnline();
+								//
+							} else {
+								//
+								res.send(JSON.stringify("Bot Already Online"));
+							}
+							res.status(200).send();
+						}
+						//
+						res.send(JSON.stringify("Welcome User"));
+						res.status(200).send();
+					});
+			}
+			return getDBData();
+		});
+	} catch (error) {}
+});
+
+
+
+exports.TwitchShutDown = functions.https.onRequest((req, res) => {
+	let twitchClientId = "";
+	let twitchClientAccess = "";
+	var dbData = {};
+	let userID = {};
+	res.status(200);
+	const cors = require("cors")({ origin: true });
+	res.set("Access-Control-Allow-Origin", "*");
+	res.set("Access-Control-Allow-Headers", "Content-Type");
+	try {
+		let runOnce = 0;
+		//Declare CORs Rules
+		const cors = require("cors")({ origin: true });
+		res.status(200);
+		res.set("Access-Control-Allow-Origin", "*");
+		res.set("Access-Control-Allow-Headers", "Content-Type");
+		cors(req, res, () => {
+			const cors = require("cors")({ origin: true });
+			res.status(200);
+			res.set("Access-Control-Allow-Origin", "*");
+			res.set("Access-Control-Allow-Headers", "Content-Type");
+			const gotUID = JSON.parse(req.headers["headertokens"]).uid;
+			userID = JSON.parse(req.headers["headertokens"]).uid;
+			const gotHeaders = JSON.stringify(req.headers["headertokens"]);
+
+			async function getDBData() {
+				var db = admin.firestore();
+				await db
+					.collection("Secrets")
+					.get()
+					.then((snapshot) => {
+						snapshot.forEach((doc) => {
+							var key = doc.id;
+							var data = doc.data();
+							data["key"] = key;
+							dbData[key] = data;
+						});
+						if (dbData !== undefined) {
+							//Begin Auth Comparison
+							if (String(gotUID) === String(dbData.Admins.Key)) {
+								//Successful Admin UID
+								res.send(JSON.stringify("Shutting Down Via Admin"));
+								const authProvider = new StaticAuthProvider(
+									twitchClientId,
+									twitchClientAccess
+								);
+
+								const chatClient = new ChatClient(authProvider, {
+									channels: ["JasonHoku"],
+								});
+								async function setAPIsOffline() {
+									var db3 = admin.firestore();
+									db3.collection("Secrets").doc("MetaData").set(
+										{
+											TwitchOn: false,
+										},
+										{ merge: true }
+									);
+								}
+
+								chatClient.quit();
+								setAPIsOffline();
+							} else {
+								//Not Admin UID
+								res.send(JSON.stringify("No Access For Regular User"));
+							}
+							res.status(200).send();
+						}
+					});
+			}
+			getDBData();
+		});
+	} catch (error) {}
+});
+
 exports.oneMinuteInterval = functions.pubsub
 	.schedule("every 1 minutes")
 	.onRun((context) => {

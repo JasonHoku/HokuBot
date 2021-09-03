@@ -9,6 +9,7 @@ import { Button, Popover, PopoverBody } from "reactstrap";
 import { ImCogs } from "react-icons/im";
 
 import { FaTwitch } from "react-icons/fa";
+import { FaPowerOff } from "react-icons/fa";
 
 import { FiSave } from "react-icons/fi";
 
@@ -18,6 +19,7 @@ import { IoCreateOutline } from "react-icons/io5";
 import { IoCloseCircleSharp } from "react-icons/io5";
 import { IoSearchCircleSharp } from "react-icons/io5";
 import { IoToday } from "react-icons/io5";
+import { IoHome } from "react-icons/io5";
 
 import { IoIosRefreshCircle } from "react-icons/io";
 
@@ -65,11 +67,13 @@ function ModeratorPage() {
 	const [typeGameTimer, setTypeGameTimer] = useState(0);
 	const [gotDailyGenData, setGotDailyGenData] = useState({});
 	const [gotToDoCollection, setGotToDoCollection] = useState({});
+	const [modalSearchResults, setModalSearchResults] = useState(null);
 
 	const [gotFireGeneratedText, setGotFireGeneratedText] = useState("");
 	const [typeGameCorrect, setTypeGameCorrect] = useState(true);
 	const [gotTTVSettingsState, setGotTTVSettingsState] = useState(true);
 	const [TTVSettingsTab, setTTVSettingsTab] = useState("Announcements");
+	const [gotTTVAnnouncementCD, setGotTTVAnnouncementCD] = useState("Loading");
 
 	const isInitialMount = useRef(true);
 	const typeGameCounterRef = useRef(true);
@@ -274,6 +278,7 @@ function ModeratorPage() {
 									data["key"] = key;
 									dbData[key] = data;
 								});
+								setGotTTVAnnouncementCD(dbData.TwitchMeta.announcementInterval);
 
 								Object.entries(dbData.TwitchAnnouncements).forEach((el, index) => {
 									// var newDivArr = document.createElement("div");
@@ -423,6 +428,66 @@ function ModeratorPage() {
 					</button>
 					&nbsp;
 					<button
+						onClick={() => {
+							let onlineDirectorVar;
+							runFunction();
+							async function runFunction() {
+								console.log("Running");
+								require("firebase/functions");
+
+								async function sendRequest(props) {
+									//Emulator local url for development:
+									if (isTwitchOnline) {
+										onlineDirectorVar = "TwitchShutDown";
+									} else {
+										onlineDirectorVar = "StartTwitchBot";
+									}
+
+									let fetchURL = "";
+									const urlLocal = `http://localhost:5122/hokubot/us-central1/${onlineDirectorVar}`;
+
+									// Quickly Toggle Between Emulator & Live Functions (Detects Localhost)
+
+									//Live  url:5
+									const urlLive = `https://us-central1-hokubot.cloudfunctions.net/${onlineDirectorVar}`;
+
+									if (useEmulator && window.location.hostname.includes("localhost")) {
+										fetchURL = urlLocal;
+									} else {
+										fetchURL = urlLive;
+									}
+
+									//Send Details
+									if (
+										!isTwitchOnline ||
+										window.confirm("Are you sure you want to shut down the Twitch bot?")
+									) {
+										const rawResponse = await fetch(fetchURL, {
+											method: "POST",
+											mode: "cors",
+											headers: new Headers({
+												"Content-Type": "application/json",
+												Accept: "application/json",
+												HeaderTokens: JSON.stringify({
+													refreshToken: auth.currentUser.refreshToken,
+													authDomain: auth.currentUser.authDomain,
+													uid: auth.currentUser.uid,
+													email: auth.currentUser.email,
+													hostname: auth.currentUser.hostname,
+													hostname2: window.location.hostname,
+												}),
+											}),
+											body: JSON.stringify({
+												UUID: auth.currentUser.uuid,
+											}),
+										});
+										const content = await rawResponse.json();
+										console.log(content);
+									}
+								}
+								sendRequest();
+							}
+						}}
 						style={{
 							textShadow: " 0 0 5px #6666ff",
 							color: "#6666ff",
@@ -433,7 +498,19 @@ function ModeratorPage() {
 							backgroundColor: "transparent",
 						}}
 					>
-						X
+						<span id="StatusSpan_4" style={{ position: "relative", top: "3px" }}>
+							<FaPowerOff color={isTwitchOnline ? "#33AA33" : "#AA3333"} />
+							&nbsp;
+						</span>
+						<span
+							id="StatusSpan_5"
+							style={{ position: "relative", top: "2px", width: "50%", zIndex: 12 }}
+						></span>{" "}
+						<FirebaseAppProvider firebaseConfig={firebaseConfig}>
+							<span>
+								<GetTwitchOnlineDoc />
+							</span>
+						</FirebaseAppProvider>
 					</button>
 					&nbsp;
 					<div hidden={TTVSettingsTab !== "Announcements"}>
@@ -460,7 +537,67 @@ function ModeratorPage() {
 						<br />
 						&nbsp; Announce Every{" "}
 						<input
-							defaultValue={10}
+							onChange={(e) => {
+								let docLength = Object.entries(gotTTVSettingsState).length;
+
+								if (!isSaveActive.current) {
+									isSaveActive.current = true;
+									var ttvdbData = {};
+									var db = firebase.firestore();
+									db
+										.collection("Public")
+										.get()
+										.then((snapshot) => {
+											snapshot.forEach((doc) => {
+												var key = doc.id;
+												var data = doc.data();
+												data["key"] = key;
+												ttvdbData[key] = data;
+											});
+
+											var tempArray = [];
+
+											console.log("XYZ");
+											console.log(e.target.value);
+											console.log(ttvdbData.TwitchAnnouncements);
+											console.log("XYZ");
+
+											var db3 = firebase.firestore();
+											db3
+												.collection("Public")
+												.doc("TwitchMeta")
+												.set(
+													{
+														announcementInterval: e.target.value,
+													},
+													{ merge: true }
+												)
+												.then((data, error) => {
+													if (!error) {
+														toast(
+															<div>
+																<div>
+																	<h1>Auto Saved!</h1>
+																	<h2>Success!</h2>
+																</div>
+																<div>
+																	<h2>Annoucement # {ttvdbData.TwitchAnnouncements.length} </h2>
+																	{e.target.value}
+																</div>
+																<div>XYZ</div>
+															</div>
+														);
+														setTimeout(() => {
+															isSaveActive.current = false;
+														}, 5000);
+													}
+												});
+										});
+								}
+								// console.log(" ");
+								// console.log(e.target.value);
+							}}
+							defaultValue={gotTTVAnnouncementCD}
 							type="number"
 							style={{
 								height: "35px",
@@ -1402,8 +1539,56 @@ function ModeratorPage() {
 						<input
 							hidden
 							onChange={(e) => {
-								console.log("Searching");
-								console.log(e.target.value);
+								// console.log("Searching");
+								// console.log(e.target.value);
+								// console.log(gotToDoCollection);
+
+								let separatedWordList = [];
+								let matchedTitlesList = [];
+
+								gotToDoCollection.forEach((el) => {
+									let tempJoinedLetters = "";
+
+									for (let i = 0; i < el.title.length; i++) {
+										tempJoinedLetters += String(el.title).charAt(i);
+										// console.log(String(el.title).charAt(i));
+
+										if (
+											tempJoinedLetters
+												.toLowerCase()
+												.includes(e.target.value.toLowerCase())
+										) {
+											if (matchedTitlesList.length < 1) {
+												matchedTitlesList.push(el.title);
+											} else {
+												if (
+													JSON.stringify(matchedTitlesList).toLowerCase().includes(
+														JSON.stringify(el.title.toLowerCase())
+													) === false
+												) {
+													matchedTitlesList.push(el.title);
+												}
+											}
+											// if (String(el.title).charAt(i) === " ") {
+											// 	separatedWordList.push({
+											// 		words: tempJoinedLetters,
+											// 		title: el.title,
+											// 	});
+											// }
+
+											// if (i === el.title.length - 1) {
+											// 	separatedWordList.push({
+											// 		words: tempJoinedLetters,
+											// 		title: el.title,
+											// 	});
+											// }
+										}
+										// separatedWordList.push(el.title);
+									}
+
+									// console.log(separatedWordList);
+								});
+								setModalSearchResults(matchedTitlesList);
 							}}
 							id="ModalSearchInput"
 							style={{
@@ -1416,6 +1601,84 @@ function ModeratorPage() {
 								backgroundColor: "transparent",
 							}}
 						></input>
+						<br />
+						{modalSearchResults &&
+							modalSearchResults.map((el) => {
+								return (
+									<div>
+										<button
+											style={{
+												textShadow: " 0 0 5px #DDDDDD",
+												color: "#DDDDDD",
+												top: "-10px",
+												position: "relative",
+												borderRadius: "5px",
+												fontSize: "20px",
+												backgroundColor: "transparent",
+											}}
+											onClick={() => {
+												// async function runSetToDoActive() {
+												// 	var db = firebase.firestore();
+												// 	db
+												// 		.collection("ToDoCollection")
+												// 		.doc(el.title)
+												// 		.set(
+												// 			{
+												// 				status: 1,
+												// 				priority: 10,
+												// 				timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
+												// 			},
+												// 			{ merge: true }
+												// 		)
+												// 		.then(
+												// 			setTimeout(() => {
+												// 				db
+												// 					.collection("ToDoCollection")
+												// 					.get()
+												// 					.then((snapshot) => {
+												// 						var dbData = {};
+												// 						snapshot.forEach((doc) => {
+												// 							var key = doc.id;
+												// 							var data = doc.data();
+												// 							data["key"] = key;
+												// 							dbData[key] = data;
+												// 						});
+												// 						console.log(dbData);
+												// 						var tempVar = "";
+												// 						var tempVar2 = "";
+												// 						var tempVar3 = "";
+												// 						//
+												// 						Object.values(dbData).forEach((el) => {
+												// 							if (el.timeStamp === null) {
+												// 								console.log(" ");
+												// 								console.log(el.title);
+												// 								console.log(el.title);
+												// 								console.log(el.title);
+												// 								console.log(" ");
+												// 								el.timeStamp =
+												// 									firebase.firestore.FieldValue.serverTimestamp();
+												// 							}
+												// 						});
+												// 						var sorted = Object.values(dbData).sort(function (a, b) {
+												// 							if (b.timeStamp && a.timeStamp)
+												// 								return (
+												// 									new Date(b.timeStamp.toDate()) -
+												// 									new Date(a.timeStamp.toDate())
+												// 								);
+												// 						});
+												// 						gotToDoCollection(sorted);
+												// 					});
+												// 			}, 250)
+												// 		);
+												// }
+												// runSetToDoActive()
+											}}
+										>
+											{el}
+										</button>
+									</div>
+								);
+							})}
 						<input
 							onChange={(e) => {
 								console.log(e.target.value);
@@ -1557,7 +1820,7 @@ function ModeratorPage() {
 						}}
 						style={{ position: "relative", margin: "auto" }}
 					>
-						<IoIosRefreshCircle size="35px" />
+						<IoHome size="35px" />
 					</span>{" "}
 					<span
 						onClick={() => {

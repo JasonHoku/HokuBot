@@ -95,13 +95,28 @@ module.exports.TwitchTools = async function (props) {
 					channels: ["JasonHoku"],
 				});
 
+				var db3 = admin.firestore();
+
 				try {
-					chatClient.connect();
+					chatClient.connect().then((data, error, elseWat) => {
+						console.log(data, error, elseWat);
+						setTimeout(() => {
+							chatClient
+								.say("JasonHoku", "I am HokuBot! Keeper of this realm, hear me roar!")
+								.then((data, error, elseWat) => {
+									console.log(data, error, elseWat);
+								});
+						}, 6000);
+					});
 				} catch (error) {
 					console.log(error);
+					//
+					db3
+						.collection("Secrets")
+						.doc("MetaData")
+						.set({ TwitchOn: false }, { merge: true });
 				}
 
-				var db3 = admin.firestore();
 				db3
 					.collection("Secrets")
 					.doc("MetaData")
@@ -110,7 +125,7 @@ module.exports.TwitchTools = async function (props) {
 				//begin detection of TwitchOnOff
 
 				chatClient.onMessage((channel, user, message) => {
-					console.log(message);
+					console.log(message, user, channel);
 					async function addCount() {
 						var db = admin.firestore();
 						db
@@ -142,11 +157,19 @@ module.exports.TwitchTools = async function (props) {
 							console.log("|T| Reading Users Stats");
 							var db = admin.firestore();
 							db
-								.collection("Users")
-								.doc(String(userID.userID))
+								.collection("ToDoCollection")
+
 								.get()
-								.then((doc) => {
-									todoList = JSON.parse(JSON.stringify(doc.data())).Todo;
+								.then((snapshot) => {
+									let dbData2 = {};
+									snapshot.forEach((doc) => {
+										var key = doc.id;
+										var data = doc.data();
+										data["key"] = key;
+										dbData2[key] = data;
+									});
+
+									todoList = Object.entries(dbData2);
 									todoList.forEach((todo) => listArray.push(todo));
 								});
 
@@ -164,8 +187,18 @@ module.exports.TwitchTools = async function (props) {
 					} else if (message === "!discord") {
 						addCount();
 						chatClient.say(channel, `https://discord.gg/euxY54d`);
-					} else if (message === "!reactiflux") {
+					} else if (message === "!rf") {
 						addCount();
+
+						chatClient.say(channel, `https://discord.com/invite/reactiflux`);
+
+						setTimeout(() => {
+							chatClient.say(
+								channel,
+								`Reactiflux Discord, the worlds largest web development forum `
+							);
+						}, 1500);
+
 						chatClient.say(channel, `https://discord.gg/JStWzRV3`);
 					} else if (message === "!github") {
 						addCount();
@@ -483,49 +516,65 @@ module.exports.TwitchTools = async function (props) {
 				}
 				detectTwitchOffOn();
 
-				function twitchDecaHourlyChatSend() {
-					var decaHourlyCounter = 0;
-					console.log("|T| Setting Twitch DecaHourly Interval");
-					var twitchDecaHourlyChatSendVar;
-					if (twitchDecaHourlyChatSendVar) {
-						clearInterval(twitchDecaHourlyChatSendVar);
-					}
-					twitchDecaHourlyChatSendVar = setInterval(() => {
-						var docCounter = 0;
-						decaHourlyCounter++;
-						var db = admin.firestore();
-						db
-							.collection("Public")
-							.get()
-							.then((snapshot) => {
-								snapshot.forEach((doc) => {
-									var key = doc.id;
-									var data = doc.data();
-									data["key"] = key;
-									dbData[key] = data;
-									docCounter++;
-								});
-								if (docCounter > decaHourlyCounter) {
-									chatClient.say(
-										"JasonHoku",
-										dbData.TwitchAnnouncements[decaHourlyCounter]
-									);
-								} else {
-									chatClient.say("JasonHoku", dbData.TwitchAnnouncements[0]);
-									decaHourlyCounter = 1;
-								}
-								// dbData.TwitchAnnouncements.forEach((ele, index) => {
-								//   if (index === decaHourlyCounter) {
-								//     console.log(ele);
-								//
-								//   }
-								// });
+				function twitchVariableAnnouncement() {
+					let gotTwitchCDMinutes = 10;
 
-								console.log("|T| Running Announcement " + chatClient.isConnected);
-							});
-					}, 1000 * 60 * 10);
+					var db4 = admin.firestore();
+					db4
+						.collection("Public")
+						.doc("TwitchMeta")
+						.get()
+						.then((doc) => {
+							gotTwitchCDMinutes = JSON.parse(
+								JSON.stringify(doc.data())
+							).announcementInterval;
+
+							var docCounter = 0;
+							var decaHourlyCounter = 0;
+							var twitchVariableAnnouncementVar;
+							console.log("|T| Setting Twitch DecaHourly Interval");
+
+							if (twitchVariableAnnouncementVar) {
+								clearInterval(twitchVariableAnnouncementVar);
+							}
+							twitchVariableAnnouncementVar = setInterval(() => {
+								var db = admin.firestore();
+								db
+									.collection("Public")
+									.get()
+									.then((snapshot) => {
+										snapshot.forEach((doc) => {
+											var key = doc.id;
+											var data = doc.data();
+											data["key"] = key;
+											dbData[key] = data;
+											docCounter++;
+										});
+										if (docCounter > decaHourlyCounter) {
+											chatClient
+												.say("JasonHoku", dbData.TwitchAnnouncements[decaHourlyCounter])
+												.then((data, error, elseWat) => {
+													console.log(data, error, elseWat);
+												});
+										} else {
+											chatClient.say("JasonHoku", dbData.TwitchAnnouncements[0]);
+											decaHourlyCounter = 0;
+										}
+
+										// dbData.TwitchAnnouncements.forEach((ele, index) => {
+										//   if (index === decaHourlyCounter) {
+										//     console.log(ele);
+										//
+										//   }
+										// });
+
+										decaHourlyCounter++;
+										console.log("|T| Running Announcement " + dbData.TwitchAnnouncements);
+									});
+							}, 1000 * 60 * parseInt(gotTwitchCDMinutes));
+						});
 				}
-				twitchDecaHourlyChatSend();
+				twitchVariableAnnouncement();
 			});
 	}
 	getDBData();
