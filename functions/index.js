@@ -244,8 +244,6 @@ exports.StartTwitchBot = functions.https.onRequest((req, res) => {
 	} catch (error) {}
 });
 
-
-
 exports.TwitchShutDown = functions.https.onRequest((req, res) => {
 	let twitchClientId = "";
 	let twitchClientAccess = "";
@@ -617,60 +615,142 @@ exports.oneMinuteInterval = functions.pubsub
 // 			});
 // 	});
 
+var hasRanDaily = false;
+
 exports.MorningDailyFun = functions.pubsub
 	.schedule("45 08 * * *")
 	.timeZone("Pacific/Honolulu")
 	.onRun(() => {
 		//
-		DailyDiscordAnnounceFunction();
-		//
-		async function DailyDiscordAnnounceFunction() {
-			const DiscordDaily = require("./components/Discord/DiscordIndex");
-			return DiscordDaily.DiscordDaily();
-		}
-		//
-
-		resetDailyTodos();
-		//
-		//
-
-		function resetDailyTodos() {
+		if (!hasRanDaily) {
+			hasRanDaily = true;
+			setTimeout(() => {
+				hasRanDaily = false;
+			}, 30000);
+			DailyDiscordAnnounceFunction();
+			async function DailyDiscordAnnounceFunction() {
+				try {
+					const DiscordDaily = require("./components/Discord/MorningAnnouncer/MorningDiscordIndex");
+					return DiscordDaily.DiscordDaily();
+				} catch (error) {
+					console.log(error);
+				}
+			}
 			//
-			var db = admin.firestore();
-			var dbData = {};
-			db
-				.collection("ToDoCollection")
-				.get()
-				.then((snapshot) => {
-					snapshot.forEach((doc) => {
-						var key = doc.id;
-						var data = doc.data();
-						data["key"] = key;
-						dbData[key] = data;
-					});
-					//
 
-					if (dbData) {
-						// If status repeatable & finished
-						// set status to active
-						Object.values(dbData).forEach((el) => {
-							if (el.status === 4) {
-								console.log(el.status);
+			resetDailyTodos();
+			//
+			//
 
-								var db = admin.firestore();
-								db.collection("ToDoCollection").doc(el.title).set(
-									{
-										status: 3,
-										priority: 10,
-										timeStamp: admin.firestore.FieldValue.serverTimestamp(),
-									},
-									{ merge: true }
-								);
-							}
+			async function resetDailyTodos() {
+				//
+				var db = admin.firestore();
+				var dbData = {};
+				db
+					.collection("ToDoCollection")
+					.get()
+					.then((snapshot) => {
+						snapshot.forEach((doc) => {
+							var key = doc.id;
+							var data = doc.data();
+							data["key"] = key;
+							dbData[key] = data;
 						});
-					}
-				});
+						//
+
+						if (dbData) {
+							// If status repeatable & finished
+							// set status to active
+							Object.values(dbData).forEach((el) => {
+								if (el.status === 4) {
+									console.log(el.status);
+
+									var db = admin.firestore();
+									db.collection("ToDoCollection").doc(el.title).set(
+										{
+											status: 3,
+											priority: 10,
+											timeStamp: admin.firestore.FieldValue.serverTimestamp(),
+										},
+										{ merge: true }
+									);
+								}
+							});
+							return true;
+						}
+					});
+			}
 		}
 		//
 		//
 	});
+
+
+
+	exports.NoonDailyFun = functions.pubsub
+		.schedule("03 12 * * *")
+		.timeZone("Pacific/Honolulu")
+		.onRun(() => {
+			//
+			if (!hasRanDaily) {
+				hasRanDaily = true;
+				setTimeout(() => {
+					hasRanDaily = false;
+				}, 30000);
+				DailyDiscordAnnounceFunction();
+				async function DailyDiscordAnnounceFunction() {
+					try {
+						const DiscordDaily = require("./components/Discord/NoonAnnounce/NoonDiscordIndex");
+						return DiscordDaily.DiscordDaily();
+					} catch (error) {
+						console.log(error);
+					}
+				}
+				//
+
+				resetDailyTodos();
+				//
+				//
+
+				async function resetDailyTodos() {
+					//
+					var db = admin.firestore();
+					var dbData = {};
+					db
+						.collection("ToDoCollection")
+						.get()
+						.then((snapshot) => {
+							snapshot.forEach((doc) => {
+								var key = doc.id;
+								var data = doc.data();
+								data["key"] = key;
+								dbData[key] = data;
+							});
+							//
+
+							if (dbData) {
+								// If status repeatable & finished
+								// set status to active
+								Object.values(dbData).forEach((el) => {
+									if (el.status === 4) {
+										console.log(el.status);
+
+										var db = admin.firestore();
+										db.collection("ToDoCollection").doc(el.title).set(
+											{
+												status: 3,
+												priority: 10,
+												timeStamp: admin.firestore.FieldValue.serverTimestamp(),
+											},
+											{ merge: true }
+										);
+									}
+								});
+								return true;
+							}
+						});
+				}
+			}
+			//
+			//
+		});
