@@ -617,8 +617,9 @@ exports.oneMinuteInterval = functions.pubsub
 
 var hasRanDaily = false;
 
-exports.MorningDailyFun = functions.pubsub
-	.schedule("45 08 * * *")
+exports.MorningDailyFun = functions
+	.runWith({ timeoutSeconds: 300 })
+	.pubsub.schedule("45 08 * * *")
 	.timeZone("Pacific/Honolulu")
 	.onRun(() => {
 		//
@@ -630,8 +631,8 @@ exports.MorningDailyFun = functions.pubsub
 			DailyDiscordAnnounceFunction();
 			async function DailyDiscordAnnounceFunction() {
 				try {
-					const DiscordDaily = require("./components/Discord/MorningAnnouncer/MorningDiscordIndex");
-					return DiscordDaily.DiscordDaily();
+					const MorningDiscordDaily = require("./components/Discord/MorningAnnouncer/MorningDiscordIndex");
+					return MorningDiscordDaily.MorningDiscordDaily();
 				} catch (error) {
 					console.log(error);
 				}
@@ -685,72 +686,69 @@ exports.MorningDailyFun = functions.pubsub
 		//
 	});
 
-
-
-	exports.NoonDailyFun = functions.pubsub
-		.schedule("03 12 * * *")
-		.timeZone("Pacific/Honolulu")
-		.onRun(() => {
-			//
-			if (!hasRanDaily) {
-				hasRanDaily = true;
-				setTimeout(() => {
-					hasRanDaily = false;
-				}, 30000);
-				DailyDiscordAnnounceFunction();
-				async function DailyDiscordAnnounceFunction() {
-					try {
-						const DiscordDaily = require("./components/Discord/NoonAnnounce/NoonDiscordIndex");
-						return DiscordDaily.DiscordDaily();
-					} catch (error) {
-						console.log(error);
-					}
-				}
-				//
-
-				resetDailyTodos();
-				//
-				//
-
-				async function resetDailyTodos() {
-					//
-					var db = admin.firestore();
-					var dbData = {};
-					db
-						.collection("ToDoCollection")
-						.get()
-						.then((snapshot) => {
-							snapshot.forEach((doc) => {
-								var key = doc.id;
-								var data = doc.data();
-								data["key"] = key;
-								dbData[key] = data;
-							});
-							//
-
-							if (dbData) {
-								// If status repeatable & finished
-								// set status to active
-								Object.values(dbData).forEach((el) => {
-									if (el.status === 4) {
-										console.log(el.status);
-
-										var db = admin.firestore();
-										db.collection("ToDoCollection").doc(el.title).set(
-											{
-												status: 3,
-												priority: 10,
-												timeStamp: admin.firestore.FieldValue.serverTimestamp(),
-											},
-											{ merge: true }
-										);
-									}
-								});
-								return true;
-							}
-						});
+exports.NoonDailyFun = functions.pubsub
+	.schedule("03 12 * * *")
+	.timeZone("Pacific/Honolulu")
+	.onRun(() => {
+		//
+		if (!hasRanDaily) {
+			hasRanDaily = true;
+			setTimeout(() => {
+				hasRanDaily = false;
+			}, 30000);
+			DailyDiscordAnnounceFunction();
+			async function DailyDiscordAnnounceFunction() {
+				try {
+					const DiscordDaily = require("./components/Discord/NoonAnnounce/NoonDiscordIndex");
+					DiscordDaily.DiscordDaily();
+				} catch (error) {
+					console.log(error);
 				}
 			}
-			//
-			//
-		});
+		}
+	});
+
+exports.NoonDailyFun = functions.pubsub
+	.schedule("15 4 * * *")
+	.timeZone("Pacific/Honolulu")
+	.onRun(() => {
+		//
+		if (!hasRanDaily) {
+			hasRanDaily = true;
+			setTimeout(() => {
+				hasRanDaily = false;
+			}, 30000);
+			DailyDiscordAnnounceFunction();
+			async function DailyDiscordAnnounceFunction() {
+				try {
+					const DiscordDaily = require("./components/Discord/EveningAnnouncer/EveningDiscordIndex");
+					return DiscordDaily.DiscordDaily();
+				} catch (error) {
+					console.log(error);
+				}
+			}
+		}
+	});
+
+exports.AlwaysOnFunction = functions
+	.runWith({ minInstances: 1, memory: "128MB" })
+	.pubsub.schedule("24 20 * * *")
+	.timeZone("Pacific/Honolulu")
+	.onRun(() => {
+		//
+		if (!hasRanDaily) {
+			hasRanDaily = true;
+			setTimeout(() => {
+				hasRanDaily = false;
+			}, 30000);
+			DailyDiscordAnnounceFunction();
+			async function DailyDiscordAnnounceFunction() {
+				try {
+					const DiscordAlwaysOnline = require("./components/Discord/DiscordMessageHandler");
+					return DiscordAlwaysOnline.DiscordAlwaysOnline();
+				} catch (error) {
+					console.log(error);
+				}
+			}
+		}
+	});

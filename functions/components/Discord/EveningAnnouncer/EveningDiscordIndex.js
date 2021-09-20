@@ -6,7 +6,7 @@ module.exports.DiscordDaily = async function () {
 	var dbData = {};
 	var DiscordAPI = "";
 
-	console.log("|D| Running Daily Noon Discord Announcement");
+	console.log("|D| Running Daily Evening Discord Announcement");
 	async function getDBData() {
 		var db = admin.firestore();
 		db

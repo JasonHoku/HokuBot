@@ -21,7 +21,7 @@ import { IoSearchCircleSharp } from "react-icons/io5";
 import { IoToday } from "react-icons/io5";
 import { IoHome } from "react-icons/io5";
 
-import { IoIosRefreshCircle } from "react-icons/io";
+import { IoIosRefreshCircle, IoIosTrendingUp } from "react-icons/io";
 
 import { GiRaceCar } from "react-icons/gi";
 
@@ -32,6 +32,8 @@ import { GoCalendar } from "react-icons/go";
 import { GoGraph } from "react-icons/go";
 
 import { TaskerComponent } from "./tasker";
+
+import { DisplayTrendData } from "./trendData";
 
 import {
 	FirebaseAppProvider,
@@ -157,6 +159,8 @@ function ModeratorPage() {
 					gotToDoCollection={gotToDoCollection}
 				/>
 			);
+		} else if (tabName === "Trends"){
+			return <DisplayTrendData props="XYZ" />
 		}
 	}
 
@@ -1562,9 +1566,9 @@ function ModeratorPage() {
 												matchedTitlesList.push(el.title);
 											} else {
 												if (
-													JSON.stringify(matchedTitlesList).toLowerCase().includes(
-														JSON.stringify(el.title.toLowerCase())
-													) === false
+													JSON.stringify(matchedTitlesList)
+														.toLowerCase()
+														.includes(JSON.stringify(el.title.toLowerCase())) === false
 												) {
 													matchedTitlesList.push(el.title);
 												}
@@ -1851,6 +1855,22 @@ function ModeratorPage() {
 						style={{ position: "relative", margin: "auto" }}
 					>
 						<GoGraph size="35px" />
+					</span>{" "}
+					<span
+						onClick={() => {
+
+
+							setTabName("Trends")
+
+							// document.getElementById("HokuModalDescription").innerHTML = String(
+							// 	"<br /> Viewing Trend Data:" + "<br />" + "<br />"
+							// ).replaceAll("|$%$|", "<br />");
+							// document.getElementById("HokuModal").hidden = false;
+							// document.getElementById("ModalInput").hidden = true;
+						}}
+						style={{ position: "relative", margin: "auto" }}
+					>
+						<IoIosTrendingUp size="35px" />
 					</span>{" "}
 					<span
 						onClick={() => {
