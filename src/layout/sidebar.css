@@ -1,0 +1,29 @@
+.sidebarLinks {
+	font-family: "Montserrat", sans-serif;
+	font-weight: 600;
+	margin-bottom: 25px;
+	font-size: 16px;
+}
+
+.gradientBtn:hover {
+	transition: 1s;
+	background-image: linear-gradient(
+		to right,
+		#dabc85 100%,
+		#b68b3b 51%,
+		#dabc85 0%
+	);
+	background-position: right center;
+}
+.gradientBtn {
+	border-radius: 10px;
+	display: inline-block;
+	white-space: nowrap;
+	transition: 1s;
+	background: transparent;
+	color: black;
+	text-align: left;
+	padding-top: 15px;
+	padding-bottom: 35px;
+	padding-left: 39px;
+}

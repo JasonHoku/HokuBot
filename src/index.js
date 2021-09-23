@@ -5,12 +5,20 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import * as serviceWorker from "./serviceWorker";
 
+import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 
 ReactDOM.render(
 	<React.StrictMode>
-		<App /> <ToastContainer />
+		<BrowserRouter>
+			<Router>
+				<App />
+			</Router>
+			<ToastContainer />
+		</BrowserRouter>
 	</React.StrictMode>,
 	document.getElementById("root")
 );

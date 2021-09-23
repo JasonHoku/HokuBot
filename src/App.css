@@ -41,3 +41,8 @@
 body > div:nth-child(8) > div > div {
 	z-index: 1999;
 }
+
+body {
+	font-family: 'Inter';
+}
+

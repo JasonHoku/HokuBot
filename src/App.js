@@ -4,7 +4,10 @@ import "firebase/auth";
 import "firebase/storage";
 import "firebase/firestore";
 import "firebaseui/dist/firebaseui.css";
+
 import AppAuth from "./account/AppAuth";
+
+import AppSidebar from "./layout/sidebar";
 try {
 	if (!firebase.apps.length) {
 		firebase.initializeApp();
@@ -48,7 +51,7 @@ function App() {
 				</svg>
 				<h2
 					style={{
-						fontFamily: "courier",
+						fontFamily: "Inter",
 						fontWeight: "600",
 						fontSize: "28px",
 						marginLeft: "15px",
@@ -63,6 +66,7 @@ function App() {
 					</a>
 				</h2>
 				<AppAuth />
+				<AppSidebar routeProps={"XYZ"} />
 			</header>
 		</div>
 	);

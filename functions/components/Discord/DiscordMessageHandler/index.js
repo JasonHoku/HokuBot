@@ -33,41 +33,22 @@ module.exports.DiscordAlwaysOnline = async function () {
 					client.on("ready", () => {
 						console.log(`|D| Logged in as ${client.user.tag}!`);
 						///////////////////////////////////////////////
-						var counter = 0;
+						var resetVar = true;
 						setInterval(() => {
-							counter++;
-							const list = client.users.cache
-								.find((user) => user.username === "JahHoku")
-								.send(`Count ${counter}`);
-							console.log(list);
+							resetVar = !resetVar;
 						}, 60000);
 						///////////////////////////////////////////////
-						async function checkDailyTimer() {
-							var genDBData = {};
-							await db
-								.collection("Public")
-								.get()
-								.then((snapshot2) => {
-									snapshot2.forEach((doc2) => {
-										var key = doc2.id;
-										var data = doc2.data();
-										data["key"] = key;
-										genDBData[key] = data;
-									});
 
-									// Get Latest 1Minute Generated Public Data
-
-									db.collection("Public").doc("DailyDiscord").set(
-										{
-											AAR: genDBData.GeneratedData.GlobalClickData.aARoots,
-											PM: genDBData.GeneratedData.GlobalClickData.PonoMap,
-											MH: genDBData.GeneratedData.GlobalClickData.microHawaii,
-										},
-										{ merge: true }
-									);
-								});
-						}
-						checkDailyTimer();
+						client.on("message", (el) => {
+							if (JSON.stringify(el).length < 2000) {
+								const list = client.users.cache.find(
+									(user) => user.username === "JahHoku"
+								);
+								list.send(`MessageData ${JSON.stringify(el)}`);
+							} else {
+								console.log(JSON.stringify(el));
+							}
+						});
 					});
 				}
 			});

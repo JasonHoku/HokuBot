@@ -21,9 +21,11 @@ import { IoSearchCircleSharp } from "react-icons/io5";
 import { IoToday } from "react-icons/io5";
 import { IoHome } from "react-icons/io5";
 
-import { IoIosRefreshCircle, IoIosTrendingUp } from "react-icons/io";
+import { IoIosTrendingUp } from "react-icons/io";
 
 import { GiRaceCar } from "react-icons/gi";
+
+import { CgMoreVerticalO } from "react-icons/cg";
 
 import { GiPerspectiveDiceSixFacesRandom } from "react-icons/gi";
 
@@ -159,8 +161,8 @@ function ModeratorPage() {
 					gotToDoCollection={gotToDoCollection}
 				/>
 			);
-		} else if (tabName === "Trends"){
-			return <DisplayTrendData props="XYZ" />
+		} else if (tabName === "Trends") {
+			return <DisplayTrendData props="XYZ" />;
 		}
 	}
 
@@ -1465,7 +1467,7 @@ function ModeratorPage() {
 	function decideRenderGeneratedText() {
 		let styledDivides = {
 			boxShadow: "0px  2px 3px 3px #221133",
-			fontFamily: "courier",
+			fontFamily: "Inter",
 			fontSize: "22px",
 			marginBottom: "15px",
 			textAlign: "left",
@@ -1820,6 +1822,14 @@ function ModeratorPage() {
 					{" "}
 					<span
 						onClick={() => {
+							window.toggleSidebar();
+						}}
+						style={{ position: "relative", margin: "auto" }}
+					>
+						<CgMoreVerticalO size="35px" />
+					</span>{" "}
+					<span
+						onClick={() => {
 							setTabName("Home");
 						}}
 						style={{ position: "relative", margin: "auto" }}
@@ -1858,9 +1868,7 @@ function ModeratorPage() {
 					</span>{" "}
 					<span
 						onClick={() => {
-
-
-							setTabName("Trends")
+							setTabName("Trends");
 
 							// document.getElementById("HokuModalDescription").innerHTML = String(
 							// 	"<br /> Viewing Trend Data:" + "<br />" + "<br />"
@@ -1982,7 +1990,7 @@ function ModeratorPage() {
 					id="StatisticsInfoId"
 					style={{
 						boxShadow: "0px  2px 3px 3px #221133",
-						fontFamily: "courier",
+						fontFamily: "Inter",
 						fontSize: "22px",
 						marginBottom: "15px",
 						textAlign: "left",
@@ -2003,7 +2011,7 @@ function ModeratorPage() {
 						style={{
 							maxHeight: "105px",
 							boxShadow: "0px  2px 3px 3px #221133",
-							fontFamily: "courier",
+							fontFamily: "Inter",
 							fontSize: "22px",
 							marginLeft: "15px",
 							marginBottom: "15px",
@@ -2035,7 +2043,7 @@ function ModeratorPage() {
 					<div
 						style={{
 							boxShadow: "0px  2px 3px 3px #221133",
-							fontFamily: "courier",
+							fontFamily: "Inter",
 							fontSize: "22px",
 							marginLeft: "15px",
 							marginBottom: "15px",
@@ -2070,7 +2078,7 @@ function ModeratorPage() {
 					<div
 						style={{
 							boxShadow: "0px  2px 3px 3px #221133",
-							fontFamily: "courier",
+							fontFamily: "Inter",
 							fontSize: "22px",
 							marginLeft: "15px",
 							marginBottom: "15px",
@@ -2103,7 +2111,7 @@ function ModeratorPage() {
 					<div
 						style={{
 							boxShadow: "0px  2px 3px 3px #221133",
-							fontFamily: "courier",
+							fontFamily: "Inter",
 							fontSize: "22px",
 							marginLeft: "15px",
 							marginBottom: "15px",
@@ -2139,7 +2147,7 @@ function ModeratorPage() {
 					<div
 						style={{
 							boxShadow: "0px  2px 3px 3px #221133",
-							fontFamily: "courier",
+							fontFamily: "Inter",
 							fontSize: "22px",
 							marginLeft: "15px",
 							marginBottom: "15px",
@@ -2173,7 +2181,7 @@ function ModeratorPage() {
 					<div
 						style={{
 							boxShadow: "0px  2px 3px 3px #221133",
-							fontFamily: "courier",
+							fontFamily: "Inter",
 							fontSize: "22px",
 							marginLeft: "15px",
 							marginBottom: "15px",
@@ -2215,7 +2223,7 @@ function ModeratorPage() {
 					<div
 						style={{
 							boxShadow: "0px  2px 3px 3px #221133",
-							fontFamily: "courier",
+							fontFamily: "Inter",
 							fontSize: "22px",
 							marginLeft: "15px",
 							marginBottom: "15px",
@@ -2245,7 +2253,7 @@ function ModeratorPage() {
 					<div
 						style={{
 							boxShadow: "0px  2px 3px 3px #221133",
-							fontFamily: "courier",
+							fontFamily: "Inter",
 							fontSize: "22px",
 							marginLeft: "15px",
 							marginBottom: "15px",
@@ -2277,7 +2285,7 @@ function ModeratorPage() {
 					<div
 						style={{
 							boxShadow: "0px  2px 3px 3px #221133",
-							fontFamily: "courier",
+							fontFamily: "Inter",
 							fontSize: "22px",
 							marginLeft: "15px",
 							marginBottom: "15px",
@@ -2474,7 +2482,7 @@ function ModeratorPage() {
 					<div
 						style={{
 							boxShadow: "0px  2px 3px 3px #221133",
-							fontFamily: "courier",
+							fontFamily: "Inter",
 							fontSize: "22px",
 							marginLeft: "15px",
 							marginBottom: "15px",
@@ -2504,7 +2512,7 @@ function ModeratorPage() {
 					<div
 						style={{
 							boxShadow: "0px  2px 3px 3px #221133",
-							fontFamily: "courier",
+							fontFamily: "Inter",
 							fontSize: "22px",
 							marginLeft: "15px",
 							marginBottom: "15px",
@@ -2828,7 +2836,7 @@ function ModeratorPage() {
 							style={{
 								color: "whitesmoke",
 								fontWeight: "1",
-								fontFamily: "courier",
+								fontFamily: "Inter",
 								backgroundColor: "transparent",
 								textShadow: "1px 1px 15px #FFFFFF,1px 1px 15px #FFFFFF",
 								zIndex: 999,
@@ -2879,7 +2887,7 @@ function ModeratorPage() {
 											style={{
 												color: "whitesmoke",
 												fontWeight: "1",
-												fontFamily: "courier",
+												fontFamily: "Inter",
 												textShadow: "1px 1px 15px #FFFFFF,1px 1px 15px #FFFFFF",
 												fontSize: "18px",
 												position: "relative",
@@ -2907,7 +2915,7 @@ function ModeratorPage() {
 											style={{
 												color: "whitesmoke",
 												fontWeight: "1",
-												fontFamily: "courier",
+												fontFamily: "Inter",
 												textShadow: "1px 1px 15px #FFFFFF,1px 1px 15px #FFFFFF",
 												fontSize: "18px",
 												position: "relative",
@@ -2926,7 +2934,7 @@ function ModeratorPage() {
 											borderRadius: "10px",
 											color: "whitesmoke",
 											fontWeight: "1",
-											fontFamily: "courier",
+											fontFamily: "Inter",
 											zIndex: 1012,
 											position: "relative",
 											fontSize: "22px",
@@ -2943,7 +2951,7 @@ function ModeratorPage() {
 											backgroundColor: "darkred",
 											borderRadius: "10px",
 											fontWeight: "1",
-											fontFamily: "courier",
+											fontFamily: "Inter",
 											zIndex: 1012,
 											right: "15px",
 											color: "whitesmoke",

@@ -708,7 +708,7 @@ exports.NoonDailyFun = functions.pubsub
 		}
 	});
 
-exports.NoonDailyFun = functions.pubsub
+exports.EveningDailyFun = functions.pubsub
 	.schedule("15 4 * * *")
 	.timeZone("Pacific/Honolulu")
 	.onRun(() => {
@@ -732,23 +732,17 @@ exports.NoonDailyFun = functions.pubsub
 
 exports.AlwaysOnFunction = functions
 	.runWith({ minInstances: 1, memory: "128MB" })
-	.pubsub.schedule("24 20 * * *")
+	.pubsub.schedule("31 12 * * *")
 	.timeZone("Pacific/Honolulu")
 	.onRun(() => {
 		//
-		if (!hasRanDaily) {
-			hasRanDaily = true;
-			setTimeout(() => {
-				hasRanDaily = false;
-			}, 30000);
-			DailyDiscordAnnounceFunction();
-			async function DailyDiscordAnnounceFunction() {
-				try {
-					const DiscordAlwaysOnline = require("./components/Discord/DiscordMessageHandler");
-					return DiscordAlwaysOnline.DiscordAlwaysOnline();
-				} catch (error) {
-					console.log(error);
-				}
+		DailyDiscordAnnounceFunction();
+		async function DailyDiscordAnnounceFunction() {
+			try {
+				const DiscordAlwaysOnline = require("./components/Discord/DiscordMessageHandler");
+				return DiscordAlwaysOnline.DiscordAlwaysOnline();
+			} catch (error) {
+				console.log(error);
 			}
 		}
 	});
