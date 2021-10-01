@@ -1,5 +1,4 @@
 module.exports.DiscordDaily = async function () {
-	const { convert } = require("html-to-text");
 	const admin = require("firebase-admin");
 	const Discord = require("discord.js");
 
@@ -84,7 +83,7 @@ module.exports.DiscordDaily = async function () {
 
 												setTimeout(() => {
 													try {
-														const TwitterTrends = require("./components/Discord/NoonAnnounce/TwitterTrends");
+														const TwitterTrends = require("./components/Discord/EveningAnnouncer/TwitterTrends");
 														TwitterTrends.TwitterTrends(channelEl);
 														//
 													} catch (error) {

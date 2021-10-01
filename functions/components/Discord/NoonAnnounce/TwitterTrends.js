@@ -1,6 +1,5 @@
 module.exports.TwitterTrends = async function (channelEl) {
 	const admin = require("firebase-admin");
-
 	const { convert } = require("html-to-text");
 
 	//
@@ -13,12 +12,10 @@ module.exports.TwitterTrends = async function (channelEl) {
 		fetch("https://trends24.in/")
 			.then((fetchRes) => {
 				// console.log(fetchRes);
-
 				if (fetchRes.status !== 200) {
 				} else {
 					fetchRes.text().then((resHTML) => {
 						//
-
 						var gotTrendsArray = [];
 						//
 						for (let i = 0; i <= 9; i++) {

@@ -1,6 +1,5 @@
-module.exports.GoogleTrends = async function () {
+module.exports.GoogleTrends = async function (googleTrends, channelEl) {
 	const admin = require("firebase-admin");
-	const googleTrends = require("google-trends-api");
 	//
 	googleTrends.dailyTrends({ geo: "US" }).then(function (results) {
 		let conjStringDailyTrends = "";
@@ -19,7 +18,7 @@ module.exports.GoogleTrends = async function () {
 				conjStringDailyTrends += trendData[i].formattedTraffic + "\n";
 			}
 		} catch (error) {
-			console.log(error)
+			console.log(error);
 			conjStringDailyTrends += " Error Getting Trends Data";
 		}
 
@@ -34,13 +33,13 @@ module.exports.GoogleTrends = async function () {
 				{ merge: true }
 			);
 
-		// channelEl.send(`\n
-		// 												📈📉📊💹
-		// 												\n**Search Trends Of The Day**:${"```"}
-		// 												\n
-		// 												\nGoogle Search USA
-		// 												\n${new Date(Date.now())}
-		// 												${conjStringDailyTrends}${"```"}
-		// 	`);
+		channelEl.send(`\n
+														📈📉📊💹
+														\n**Search Trends Of The Day**:${"```"}
+														\n
+														\nGoogle Search USA
+														\n${new Date(Date.now())}
+														${conjStringDailyTrends}${"```"}
+			`);
 	});
 };

@@ -68,10 +68,10 @@ exports.FireFunctionAPI = functions.https.onRequest((req, res) => {
 								//Launch Discord API
 								// const DiscordTools = require("./components/DiscordTools");
 								// DiscordTools.DiscordTools((userID = { userID }));
-								//Launch TwitchAPI API
-								const TwitchTools = require("./components/TwitchTools");
-								TwitchTools.TwitchTools((userID = { userID }));
-								setAPIsOnline();
+								// //Launch TwitchAPI API
+								// const TwitchTools = require("./components/TwitchTools");
+								// TwitchTools.TwitchTools((userID = { userID }));
+								// setAPIsOnline();
 								//
 							} else {
 								//
@@ -224,9 +224,9 @@ exports.StartTwitchBot = functions.https.onRequest((req, res) => {
 									);
 								}
 								//Launch TwitchAPI API
-								const TwitchTools = require("./components/TwitchTools");
-								TwitchTools.TwitchTools((userID = { userID }));
-								setAPIsOnline();
+								// const TwitchTools = require("./components/TwitchTools");
+								// TwitchTools.TwitchTools((userID = { userID }));
+								// setAPIsOnline();
 								//
 							} else {
 								//
@@ -709,7 +709,7 @@ exports.NoonDailyFun = functions.pubsub
 	});
 
 exports.EveningDailyFun = functions.pubsub
-	.schedule("15 4 * * *")
+	.schedule("15 16 * * *")
 	.timeZone("Pacific/Honolulu")
 	.onRun(() => {
 		//
@@ -746,3 +746,5 @@ exports.AlwaysOnFunction = functions
 			}
 		}
 	});
+
+
