@@ -32,12 +32,7 @@ module.exports.GoogleTrends = async function (googleTrends, channelEl) {
 				{ merge: true }
 			);
 
-		channelEl.send(`\n
-														📈📉📊💹
-														\n**Search Trends Of The Day**:${"```"}
-														\n
-														\nGoogle Search USA
-														\n${new Date(Date.now())}
+		channelEl.send(`
 														${conjStringDailyTrends}${"```"}
 			`);
 	});
