@@ -13,9 +13,9 @@ module.exports.GoogleTrends = async function (googleTrends, channelEl) {
 					Title: trendData[i].title.query,
 					Traffic: trendData[i].formattedTraffic,
 				});
-				conjStringDailyTrends += "Daily Trend " + [i + 1] + "\n";
+				conjStringDailyTrends +=
+					"GT-US Trend " + [i + 1] + " @ " + trendData[i].formattedTraffic;
 				conjStringDailyTrends += trendData[i].title.query + "\n";
-				conjStringDailyTrends += trendData[i].formattedTraffic + "\n";
 			}
 		} catch (error) {
 			console.log(error);
@@ -33,7 +33,7 @@ module.exports.GoogleTrends = async function (googleTrends, channelEl) {
 				{ merge: true }
 			);
 
-			channelEl.send(`
+		channelEl.send(`
 			${conjStringDailyTrends}${"```"}
 `);
 	});

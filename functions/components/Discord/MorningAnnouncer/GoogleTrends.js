@@ -13,9 +13,9 @@ module.exports.GoogleTrends = async function (googleTrends, channelEl) {
 					Traffic: trendData[i].formattedTraffic,
 				});
 
-				conjStringDailyTrends += "Daily Trend " + [i + 1] + "\n";
+				conjStringDailyTrends +=
+					"GT-US Trend " + [i + 1] + " @ " + trendData[i].formattedTraffic;
 				conjStringDailyTrends += trendData[i].title.query + "\n";
-				conjStringDailyTrends += trendData[i].formattedTraffic + "\n";
 			}
 		} catch (error) {
 			conjStringDailyTrends += " Error Getting Trends Data";
