@@ -617,9 +617,8 @@ exports.oneMinuteInterval = functions.pubsub
 
 var hasRanDaily = false;
 
-exports.MorningDailyFun = functions
-	.runWith({ timeoutSeconds: 300 })
-	.pubsub.schedule("45 08 * * *")
+exports.MorningDailyFun = functions.pubsub
+	.schedule("30 07 * * *")
 	.timeZone("Pacific/Honolulu")
 	.onRun(() => {
 		//
@@ -637,12 +636,12 @@ exports.MorningDailyFun = functions
 					console.log(error);
 				}
 			}
+
 			//
 
 			resetDailyTodos();
 			//
 			//
-
 			async function resetDailyTodos() {
 				//
 				var db = admin.firestore();
@@ -677,7 +676,6 @@ exports.MorningDailyFun = functions
 									);
 								}
 							});
-							return true;
 						}
 					});
 			}
@@ -696,7 +694,10 @@ exports.NoonDailyFun = functions.pubsub
 			setTimeout(() => {
 				hasRanDaily = false;
 			}, 30000);
-			DailyDiscordAnnounceFunction();
+			return DailyDiscordAnnounceFunction().then((el) => {
+				console.log("NoonDiscord Rab");
+				console.log(el);
+			});
 			async function DailyDiscordAnnounceFunction() {
 				try {
 					const DiscordDaily = require("./components/Discord/NoonAnnounce/NoonDiscordIndex");
@@ -709,7 +710,7 @@ exports.NoonDailyFun = functions.pubsub
 	});
 
 exports.EveningDailyFun = functions.pubsub
-	.schedule("15 16 * * *")
+	.schedule("00 19 * * *")
 	.timeZone("Pacific/Honolulu")
 	.onRun(() => {
 		//
@@ -718,11 +719,16 @@ exports.EveningDailyFun = functions.pubsub
 			setTimeout(() => {
 				hasRanDaily = false;
 			}, 30000);
-			DailyDiscordAnnounceFunction();
+			return DailyDiscordAnnounceFunction().then((el) => {
+				console.log("Ran Evening Fun");
+				console.log(el);
+			});
 			async function DailyDiscordAnnounceFunction() {
 				try {
 					const DiscordDaily = require("./components/Discord/EveningAnnouncer/EveningDiscordIndex");
-					return DiscordDaily.DiscordDaily();
+					return DiscordDaily.DiscordDaily().then(() => {
+						console.log("Ran Evening Discord");
+					});
 				} catch (error) {
 					console.log(error);
 				}
@@ -740,11 +746,12 @@ exports.AlwaysOnFunction = functions
 		async function DailyDiscordAnnounceFunction() {
 			try {
 				const DiscordAlwaysOnline = require("./components/Discord/DiscordMessageHandler");
-				return DiscordAlwaysOnline.DiscordAlwaysOnline();
+				DiscordAlwaysOnline.DiscordAlwaysOnline();
 			} catch (error) {
 				console.log(error);
 			}
 		}
 	});
 
-
+const DiscordAlwaysOnline = require("./components/Discord/DiscordMessageHandler");
+DiscordAlwaysOnline.DiscordAlwaysOnline();

@@ -80,18 +80,18 @@ module.exports.DiscordDaily = async function () {
 														console.log("googleTrends Error");
 														console.log(error);
 													}
-												}, 1000);
+												}, 2000);
 
-												setTimeout(() => {
-													try {
-														const TwitterTrends = require("./components/Discord/NoonAnnounce/TwitterTrends");
-														TwitterTrends.TwitterTrends(channelEl);
-														//
-													} catch (error) {
-														console.log("googleTrends Error");
-														console.log(error);
-													}
-												}, 2500);
+												// setTimeout(() => {
+												// 	try {
+												// 		const TwitterTrends = require("./TwitterTrends");
+												// 		TwitterTrends.TwitterTrends(channelEl);
+												// 		//
+												// 	} catch (error) {
+												// 		console.log("googleTrends Error");
+												// 		console.log(error);
+												// 	}
+												// }, 4500);
 											}
 											////////////////////////////////////////////////////
 											//////////////     End Daily    ////////////////

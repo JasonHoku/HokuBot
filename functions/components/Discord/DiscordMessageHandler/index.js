@@ -30,15 +30,29 @@ module.exports.DiscordAlwaysOnline = async function () {
 					// console.log(discordRes);
 				});
 				// Log When Ready
-				loginDiscord();
+				loginDiscord().then(() => {});
 				async function loginDiscord() {
-					client.on("ready", () => {
+					client.on("ready", (el) => {
 						console.log(`|D| Logged in as ${client.user.tag}!`);
 						///////////////////////////////////////////////
 						var resetVar = true;
+
+						// setTimeout(() => {
+						// 	client.destroy();
+						// }, 5000);
 						setInterval(() => {
 							resetVar = !resetVar;
-						}, 60000);
+
+							// try {
+							// 	console.log("client.uptime:" + client.uptime);
+							// 	console.log("client.user:" + client.user.tag);
+							// 	if (client.uptime) {
+							// 		console.log("Is uptime True");
+							// 	}
+							// } catch (error) {
+							// 	console.log("Caught Discord Client Error");
+							// }
+						}, 30000);
 						///////////////////////////////////////////////
 						client.on("message", (el) => {
 							if (el.author.id !== "719591367113703526") {
@@ -69,7 +83,11 @@ module.exports.DiscordAlwaysOnline = async function () {
 
 										context.font = "28px sans-serif";
 										context.fillStyle = "#ffffff";
-										context.fillText(el.author.username + ":", canvas.width / 2.5, canvas.height / 3.5);
+										context.fillText(
+											el.author.username + ":",
+											canvas.width / 2.5,
+											canvas.height / 3.5
+										);
 
 										context.fillStyle = "#ffffff";
 										context.fillText(

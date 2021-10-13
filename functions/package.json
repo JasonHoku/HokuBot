@@ -9,7 +9,7 @@
     "logs": "firebase functions:log"
   },
   "engines": {
-    "node": "12"
+    "node": "14"
   },
   "main": "index.js",
   "dependencies": {
@@ -17,7 +17,7 @@
     "canvas": "^2.8.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
-    "discord.js": "^12.2.0",
+    "discord.js": "^12.5.3",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "firebase-admin": "^9.2.0",

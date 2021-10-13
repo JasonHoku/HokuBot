@@ -25,9 +25,12 @@ module.exports.DiscordDaily = async function () {
 				console.log("|D| Discord Logging In");
 				client.login(DiscordAPI);
 				// Log When Ready
-				loginDiscord();
+				loginDiscord().then((el) => {
+					console.log("Ran Evening Discord Login");
+					console.log(el);
+				});
 				async function loginDiscord() {
-					return client.on("ready", () => {
+					client.on("ready", () => {
 						console.log(`|D| Logged in as ${client.user.tag}!`);
 						///Find User and Send Message
 						// const list = client.users.cache.find(
@@ -73,24 +76,26 @@ module.exports.DiscordDaily = async function () {
 														const googleTrends = require("google-trends-api");
 														const GoogleTrends = require("./GoogleTrends");
 														//
-														GoogleTrends.GoogleTrends(googleTrends, channelEl);
+														GoogleTrends.GoogleTrends(googleTrends, channelEl).then(() => {
+															return console.log("Ran G Trends");
+														});
 														//
 													} catch (error) {
 														console.log("googleTrends Error");
 														console.log(error);
 													}
-												}, 1000);
+												}, 2000);
 
-												setTimeout(() => {
-													try {
-														const TwitterTrends = require("./components/Discord/EveningAnnouncer/TwitterTrends");
-														TwitterTrends.TwitterTrends(channelEl);
-														//
-													} catch (error) {
-														console.log("googleTrends Error");
-														console.log(error);
-													}
-												}, 2500);
+												// setTimeout(() => {
+												// 	try {
+												// 		const TwitterTrends = require("./TwitterTrends");
+												// 		TwitterTrends.TwitterTrends(channelEl);
+												// 		//
+												// 	} catch (error) {
+												// 		console.log("googleTrends Error");
+												// 		console.log(error);
+												// 	}
+												// }, 4500);
 											}
 											////////////////////////////////////////////////////
 											//////////////     End Daily    ////////////////
@@ -99,10 +104,16 @@ module.exports.DiscordDaily = async function () {
 									});
 								}, 500);
 						}
-						checkDailyTimer();
+						checkDailyTimer().then((el) => {
+							console.log(el);
+							return console.log("Finished Evening Fun");
+						});
 					});
 				}
 			});
 	}
-	getDBData();
+	getDBData().then((el) => {
+		console.log(el);
+		return console.log("Finished Evening Discord Fun");
+	});
 };

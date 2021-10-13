@@ -32,8 +32,7 @@ module.exports.GoogleTrends = async function (googleTrends, channelEl) {
 				},
 				{ merge: true }
 			);
-		channelEl.send(`
-			${conjStringDailyTrends}${"```"}
-`);
+
+		channelEl.send(`${"```"}\n${conjStringDailyTrends}${"```"}`);
 	});
 };
