@@ -4,9 +4,8 @@ module.exports.DiscordAlwaysOnline = async function () {
 	const Canvas = require("canvas");
 	var dbData = {};
 	var DiscordAPI = "";
-	var hasSentToAnny = false;
 
-	console.log("|D| Running Daily Discord Announcement");
+	console.log("|D| Booting Discord Always On Manager");
 
 	async function getDBData() {
 		var db = admin.firestore();
@@ -22,36 +21,41 @@ module.exports.DiscordAlwaysOnline = async function () {
 				});
 				DiscordAPI = String(dbData.APIKeys.DiscordAPI);
 				//Begin Development With ENV Variables
-				const client = new Discord.Client();
+				let client = new Discord.Client();
 				//Login To DiscordAP
 				console.log("|D| Discord Logging In");
 				// response.send("LoginRes1");
-				client.login(DiscordAPI).then((discordRes) => {
-					// console.log(discordRes);
-				});
+
 				// Log When Ready
-				loginDiscord().then(() => {});
+				loginDiscord().then(() => {
+					// 	setTimeout(() => {
+					// 		client.destroy();
+					// 		client.ws.destroy();
+					// console.log(client)
+					// 	}, 10000);
+				});
 				async function loginDiscord() {
+					client.login(DiscordAPI).then((discordRes) => {
+						// console.log(discordRes);
+					});
+
 					client.on("ready", (el) => {
 						console.log(`|D| Logged in as ${client.user.tag}!`);
 						///////////////////////////////////////////////
 						var resetVar = true;
-
-						// setTimeout(() => {
-						// 	client.destroy();
-						// }, 5000);
 						setInterval(() => {
 							resetVar = !resetVar;
-
-							// try {
-							// 	console.log("client.uptime:" + client.uptime);
-							// 	console.log("client.user:" + client.user.tag);
-							// 	if (client.uptime) {
-							// 		console.log("Is uptime True");
-							// 	}
-							// } catch (error) {
-							// 	console.log("Caught Discord Client Error");
-							// }
+							try {
+								// console.log("client.uptime:" + client.uptime);
+								// console.log("client.user:" + client.user.tag);
+								if (client.uptime) {
+									console.log("Uptime True");
+								} else {
+									console.log("No UpTime Found");
+								}
+							} catch (error) {
+								console.log("Caught Discord Client Error");
+							}
 						}, 30000);
 						///////////////////////////////////////////////
 						client.on("message", (el) => {
@@ -63,7 +67,7 @@ module.exports.DiscordAlwaysOnline = async function () {
 										(user) => user.username === "JahHoku"
 									);
 									//
-									list.send(`MessageData ${JSON.stringify(el)}`);
+									list.send(`Message Data 2: ${JSON.stringify(el)}`);
 									//
 
 									setTimeout(() => {
@@ -77,9 +81,6 @@ module.exports.DiscordAlwaysOnline = async function () {
 											);
 											context.drawImage(background, 0, 0, canvas.width, canvas.height);
 										}
-
-										context.strokeStyle = "#0099ff";
-										context.strokeRect(0, 0, canvas.width, canvas.height);
 
 										context.font = "28px sans-serif";
 										context.fillStyle = "#ffffff";
@@ -117,7 +118,7 @@ module.exports.DiscordAlwaysOnline = async function () {
 										// console.log(JSON.parse(el).authorID)
 										// console.log(el.author.id);
 										// console.log(el.cleanContent);
-									}, 1500);
+									}, 3500);
 								} else {
 									// console.log(JSON.stringify(el));
 								}

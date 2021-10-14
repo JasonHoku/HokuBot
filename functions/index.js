@@ -622,63 +622,65 @@ exports.MorningDailyFun = functions.pubsub
 	.timeZone("Pacific/Honolulu")
 	.onRun(() => {
 		//
+
 		if (!hasRanDaily) {
 			hasRanDaily = true;
 			setTimeout(() => {
 				hasRanDaily = false;
 			}, 30000);
-			DailyDiscordAnnounceFunction();
+			return DailyDiscordAnnounceFunction().then((el) => {
+				console.log("NoonDiscord Ran");
+				resetDailyTodos();
+				//
+				//
+				async function resetDailyTodos() {
+					//
+					var db = admin.firestore();
+					var dbData = {};
+					db
+						.collection("ToDoCollection")
+						.get()
+						.then((snapshot) => {
+							snapshot.forEach((doc) => {
+								var key = doc.id;
+								var data = doc.data();
+								data["key"] = key;
+								dbData[key] = data;
+							});
+							//
+
+							if (dbData) {
+								// If status repeatable & finished
+								// set status to active
+								Object.values(dbData).forEach((el) => {
+									if (el.status === 4) {
+										console.log(el.status);
+
+										var db = admin.firestore();
+										db.collection("ToDoCollection").doc(el.title).set(
+											{
+												status: 3,
+												priority: 10,
+												timeStamp: admin.firestore.FieldValue.serverTimestamp(),
+											},
+											{ merge: true }
+										);
+									}
+								});
+							}
+						});
+				}
+			});
 			async function DailyDiscordAnnounceFunction() {
 				try {
-					const MorningDiscordDaily = require("./components/Discord/MorningAnnouncer/MorningDiscordIndex");
-					return MorningDiscordDaily.MorningDiscordDaily();
+					const DiscordDaily = require("./components/Discord/MorningAnnouncer/MorningDiscordIndex");
+					DiscordDaily.DiscordDaily();
 				} catch (error) {
 					console.log(error);
 				}
 			}
 
 			//
-
-			resetDailyTodos();
-			//
-			//
-			async function resetDailyTodos() {
-				//
-				var db = admin.firestore();
-				var dbData = {};
-				db
-					.collection("ToDoCollection")
-					.get()
-					.then((snapshot) => {
-						snapshot.forEach((doc) => {
-							var key = doc.id;
-							var data = doc.data();
-							data["key"] = key;
-							dbData[key] = data;
-						});
-						//
-
-						if (dbData) {
-							// If status repeatable & finished
-							// set status to active
-							Object.values(dbData).forEach((el) => {
-								if (el.status === 4) {
-									console.log(el.status);
-
-									var db = admin.firestore();
-									db.collection("ToDoCollection").doc(el.title).set(
-										{
-											status: 3,
-											priority: 10,
-											timeStamp: admin.firestore.FieldValue.serverTimestamp(),
-										},
-										{ merge: true }
-									);
-								}
-							});
-						}
-					});
-			}
 		}
 		//
 		//
@@ -695,7 +697,7 @@ exports.NoonDailyFun = functions.pubsub
 				hasRanDaily = false;
 			}, 30000);
 			return DailyDiscordAnnounceFunction().then((el) => {
-				console.log("NoonDiscord Rab");
+				console.log("NoonDiscord Ran");
 				console.log(el);
 			});
 			async function DailyDiscordAnnounceFunction() {
@@ -737,8 +739,8 @@ exports.EveningDailyFun = functions.pubsub
 	});
 
 exports.AlwaysOnFunction = functions
-	.runWith({ minInstances: 1, memory: "128MB" })
-	.pubsub.schedule("31 12 * * *")
+	.runWith({ minInstances: 1, maxInstances: 1, memory: "128MB" })
+	.pubsub.schedule("16 13 * * *")
 	.timeZone("Pacific/Honolulu")
 	.onRun(() => {
 		//
@@ -752,6 +754,3 @@ exports.AlwaysOnFunction = functions
 			}
 		}
 	});
-
-const DiscordAlwaysOnline = require("./components/Discord/DiscordMessageHandler");
-DiscordAlwaysOnline.DiscordAlwaysOnline();
