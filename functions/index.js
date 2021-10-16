@@ -1,15 +1,11 @@
-const { StaticAuthProvider } = require("twitch-auth");
-const { ChatClient } = require("twitch-chat-client");
-
 const functions = require("firebase-functions");
-const admin = require("firebase-admin");
-admin.initializeApp();
 
 console.log("Initiating Hoku Bot Framework");
 
 exports.FireFunctionAPI = functions.https.onRequest((req, res) => {
-	let twitchClientId = "";
-	let twitchClientAccess = "";
+	const admin = require("firebase-admin");
+	admin.initializeApp();
+
 	var dbData = {};
 	let userID = {};
 
@@ -91,6 +87,11 @@ exports.FireFunctionAPI = functions.https.onRequest((req, res) => {
 
 //Shutdown Function
 exports.FireFunctionShutDown = functions.https.onRequest((req, res) => {
+	const admin = require("firebase-admin");
+	const { StaticAuthProvider } = require("twitch-auth");
+	const { ChatClient } = require("twitch-chat-client");
+
+	admin.initializeApp();
 	let twitchClientId = "";
 	let twitchClientAccess = "";
 	var dbData = {};
@@ -169,8 +170,9 @@ exports.FireFunctionShutDown = functions.https.onRequest((req, res) => {
 });
 
 exports.StartTwitchBot = functions.https.onRequest((req, res) => {
-	let twitchClientId = "";
-	let twitchClientAccess = "";
+	const admin = require("firebase-admin");
+
+	admin.initializeApp();
 	var dbData = {};
 	let userID = {};
 
@@ -245,6 +247,11 @@ exports.StartTwitchBot = functions.https.onRequest((req, res) => {
 });
 
 exports.TwitchShutDown = functions.https.onRequest((req, res) => {
+	const admin = require("firebase-admin");
+	const { StaticAuthProvider } = require("twitch-auth");
+	const { ChatClient } = require("twitch-chat-client");
+
+	admin.initializeApp();
 	let twitchClientId = "";
 	let twitchClientAccess = "";
 	var dbData = {};
@@ -322,6 +329,9 @@ exports.TwitchShutDown = functions.https.onRequest((req, res) => {
 exports.oneMinuteInterval = functions.pubsub
 	.schedule("every 1 minutes")
 	.onRun((context) => {
+		const admin = require("firebase-admin");
+
+		admin.initializeApp();
 		let twitchClientId = "";
 		let twitchClientAccess = "";
 		var genDBData = {};
@@ -621,15 +631,18 @@ exports.MorningDailyFun = functions.pubsub
 	.schedule("30 07 * * *")
 	.timeZone("Pacific/Honolulu")
 	.onRun(() => {
+		const admin = require("firebase-admin");
+
+		admin.initializeApp();
 		//
 
 		if (!hasRanDaily) {
 			hasRanDaily = true;
 			setTimeout(() => {
 				hasRanDaily = false;
-			}, 30000);
-			return DailyDiscordAnnounceFunction().then((el) => {
-				console.log("NoonDiscord Ran");
+			}, 61000);
+			MorningAnnounceFunction().then((el) => {
+				console.log("Morning Discord Ran");
 				resetDailyTodos();
 				//
 				//
@@ -654,7 +667,7 @@ exports.MorningDailyFun = functions.pubsub
 								// set status to active
 								Object.values(dbData).forEach((el) => {
 									if (el.status === 4) {
-										console.log(el.status);
+										// console.log(el.status);
 
 										var db = admin.firestore();
 										db.collection("ToDoCollection").doc(el.title).set(
@@ -671,7 +684,8 @@ exports.MorningDailyFun = functions.pubsub
 						});
 				}
 			});
-			async function DailyDiscordAnnounceFunction() {
+
+			async function MorningAnnounceFunction() {
 				try {
 					const DiscordDaily = require("./components/Discord/MorningAnnouncer/MorningDiscordIndex");
 					DiscordDaily.DiscordDaily();
@@ -679,7 +693,6 @@ exports.MorningDailyFun = functions.pubsub
 					console.log(error);
 				}
 			}
-
 			//
 		}
 		//
@@ -687,20 +700,23 @@ exports.MorningDailyFun = functions.pubsub
 	});
 
 exports.NoonDailyFun = functions.pubsub
-	.schedule("03 12 * * *")
+	.schedule("39 13 * * *")
 	.timeZone("Pacific/Honolulu")
 	.onRun(() => {
+		const admin = require("firebase-admin");
+
+		admin.initializeApp();
 		//
 		if (!hasRanDaily) {
 			hasRanDaily = true;
 			setTimeout(() => {
 				hasRanDaily = false;
-			}, 30000);
-			return DailyDiscordAnnounceFunction().then((el) => {
+			}, 61000);
+			NoonAnnounceFunction().then((el) => {
 				console.log("NoonDiscord Ran");
-				console.log(el);
+				// console.log(el);
 			});
-			async function DailyDiscordAnnounceFunction() {
+			async function NoonAnnounceFunction() {
 				try {
 					const DiscordDaily = require("./components/Discord/NoonAnnounce/NoonDiscordIndex");
 					DiscordDaily.DiscordDaily();
@@ -715,17 +731,20 @@ exports.EveningDailyFun = functions.pubsub
 	.schedule("00 19 * * *")
 	.timeZone("Pacific/Honolulu")
 	.onRun(() => {
+		const admin = require("firebase-admin");
+
+		admin.initializeApp();
 		//
 		if (!hasRanDaily) {
 			hasRanDaily = true;
 			setTimeout(() => {
 				hasRanDaily = false;
-			}, 30000);
-			return DailyDiscordAnnounceFunction().then((el) => {
+			}, 61000);
+			return EveningAnnounceFunction().then((el) => {
 				console.log("Ran Evening Fun");
 				console.log(el);
 			});
-			async function DailyDiscordAnnounceFunction() {
+			async function EveningAnnounceFunction() {
 				try {
 					const DiscordDaily = require("./components/Discord/EveningAnnouncer/EveningDiscordIndex");
 					return DiscordDaily.DiscordDaily().then(() => {
@@ -739,13 +758,13 @@ exports.EveningDailyFun = functions.pubsub
 	});
 
 exports.AlwaysOnFunction = functions
-	.runWith({ minInstances: 1, maxInstances: 1, memory: "128MB" })
-	.pubsub.schedule("16 13 * * *")
+	.runWith({ minInstances: 1, maxInstances: 1, memory: "256MB" })
+	.pubsub.schedule("40 * * * *")
 	.timeZone("Pacific/Honolulu")
 	.onRun(() => {
 		//
-		DailyDiscordAnnounceFunction();
-		async function DailyDiscordAnnounceFunction() {
+		AlwaysOnDiscordFunction();
+		async function AlwaysOnDiscordFunction() {
 			try {
 				const DiscordAlwaysOnline = require("./components/Discord/DiscordMessageHandler");
 				DiscordAlwaysOnline.DiscordAlwaysOnline();

@@ -21,7 +21,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "firebase-admin": "^9.2.0",
-    "firebase-functions": "^3.14.1",
+    "firebase-functions": "^3.15.7",
     "google-trends-api": "^4.9.2",
     "html-to-text": "^8.0.0",
     "moment": "^2.29.1",
