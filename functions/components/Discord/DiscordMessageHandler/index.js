@@ -1,7 +1,11 @@
 module.exports.DiscordAlwaysOnline = async function () {
 	const admin = require("firebase-admin");
+	try {
+		if (!admin.app.length < 1) admin.initializeApp();
+	} catch (error) {}
+
 	const Discord = require("discord.js");
-	const Canvas = require("canvas");
+	// const Canvas = require("canvas");
 	var dbData = {};
 	var DiscordAPI = "";
 
@@ -9,7 +13,7 @@ module.exports.DiscordAlwaysOnline = async function () {
 
 	async function getDBData() {
 		var db = admin.firestore();
-		db
+		await db
 			.collection("Secrets")
 			.get()
 			.then((snapshot) => {
@@ -22,9 +26,10 @@ module.exports.DiscordAlwaysOnline = async function () {
 				DiscordAPI = String(dbData.APIKeys.DiscordAPI);
 				//Begin Development With ENV Variables
 				let client = new Discord.Client();
+
+				client.options.restRequestTimeout = 30000;
 				//Login To DiscordAP
 				console.log("|D| Discord Testing Logged-In");
-				// response.send("LoginRes1");
 				if (client.user) {
 					console.log(client.user.tag);
 				} else {
@@ -53,14 +58,14 @@ module.exports.DiscordAlwaysOnline = async function () {
 									// console.log("client.uptime:" + client.uptime);
 									// console.log("client.user:" + client.user.tag);
 									if (client.uptime) {
-										// console.log("Uptime True");
+										console.log("Service Is Warm");
 									} else {
 										console.log("No UpTime Found");
 									}
 								} catch (error) {
 									console.log("Caught Discord Client Error");
 								}
-							}, 30000);
+							}, 60000);
 							///////////////////////////////////////////////
 							client.on("message", (el) => {
 								if (el.author.id !== "719591367113703526") {
@@ -75,48 +80,57 @@ module.exports.DiscordAlwaysOnline = async function () {
 										//
 
 										setTimeout(() => {
-											const canvas = Canvas.createCanvas(700, 250);
-											const context = canvas.getContext("2d");
-
 											sendImage();
 											async function sendImage() {
-												const background = await Canvas.loadImage(
-													"https://microhawaii.com/logo.png"
+												// or with async/await:
+
+												// do something with image
+
+												// 	const background = await Canvas.loadImage(
+												// 		"https://firebasestorage.googleapis.com/v0/b/hokubot.appspot.com/o/canvas-plain.078bfbd1.png?alt=media&token=5a2cefe6-92c3-4cd6-85bc-67ec80857f9b"
+												// 	);
+
+												const { createCanvas, loadImage } = require("canvas");
+												const myimg = await loadImage(
+													"https://firebasestorage.googleapis.com/v0/b/hokubot.appspot.com/o/canvas-plain.078bfbd1.png?alt=media&token=5a2cefe6-92c3-4cd6-85bc-67ec80857f9b"
 												);
-												context.drawImage(background, 0, 0, canvas.width, canvas.height);
+												const canvas = createCanvas(700, 250);
+												const context = canvas.getContext("2d");
+
+												context.drawImage(myimg, 0, 0, canvas.width, canvas.height);
+
+												context.font = "28px sans-serif";
+												context.fillStyle = "#ffffff";
+												context.fillText(
+													el.author.username + ":",
+													canvas.width / 2.5,
+													canvas.height / 3.5
+												);
+
+												context.fillStyle = "#ffffff";
+												context.fillText(
+													`${el.cleanContent}!`,
+													canvas.width / 2.5,
+													canvas.height / 1.8
+												);
+
+												// const avatar = Canvas.loadImage(
+												// 	interaction.user.displayAvatarURL({ format: "jpg" })
+												// );
+												// context.drawImage(avatar, 25, 25, 200, 200);
+
+												const { MessageAttachment } = require("discord.js");
+												const attachment = new MessageAttachment(
+													canvas.toBuffer(),
+													"profile-image.png"
+												);
+
+												list.send({ files: [attachment] });
+
+												// console.log(JSON.parse(el).authorID)
+												// console.log(el.author.id);
+												// console.log(el.cleanContent);
 											}
-
-											context.font = "28px sans-serif";
-											context.fillStyle = "#ffffff";
-											context.fillText(
-												el.author.username + ":",
-												canvas.width / 2.5,
-												canvas.height / 3.5
-											);
-
-											context.fillStyle = "#ffffff";
-											context.fillText(
-												`${el.cleanContent}!`,
-												canvas.width / 2.5,
-												canvas.height / 1.8
-											);
-
-											// const avatar = Canvas.loadImage(
-											// 	interaction.user.displayAvatarURL({ format: "jpg" })
-											// );
-											// context.drawImage(avatar, 25, 25, 200, 200);
-
-											const { MessageAttachment } = require("discord.js");
-											const attachment = new MessageAttachment(
-												canvas.toBuffer(),
-												"profile-image.png"
-											);
-
-											list.send({ files: [attachment] });
-
-											// console.log(JSON.parse(el).authorID)
-											// console.log(el.author.id);
-											// console.log(el.cleanContent);
 										}, 3500);
 									} else {
 										// console.log(JSON.stringify(el));
@@ -128,5 +142,7 @@ module.exports.DiscordAlwaysOnline = async function () {
 				}
 			});
 	}
-	getDBData();
+	getDBData().then(() => {
+		return console.log("Finished");
+	});
 };

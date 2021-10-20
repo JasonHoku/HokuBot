@@ -759,7 +759,7 @@ exports.EveningDailyFun = functions.pubsub
 
 exports.AlwaysOnFunction = functions
 	.runWith({ minInstances: 1, maxInstances: 1, memory: "256MB" })
-	.pubsub.schedule("40 * * * *")
+	.pubsub.schedule("12 * * * *")
 	.timeZone("Pacific/Honolulu")
 	.onRun(() => {
 		//
@@ -767,7 +767,7 @@ exports.AlwaysOnFunction = functions
 		async function AlwaysOnDiscordFunction() {
 			try {
 				const DiscordAlwaysOnline = require("./components/Discord/DiscordMessageHandler");
-				DiscordAlwaysOnline.DiscordAlwaysOnline();
+				return await DiscordAlwaysOnline.DiscordAlwaysOnline();
 			} catch (error) {
 				console.log(error);
 			}
