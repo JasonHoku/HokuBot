@@ -1193,253 +1193,254 @@ function ModeratorPage() {
 				// Init Interval for TypeGame
 				window.varInt3 = typeGameTimer;
 
-				setInterval(() => {
-					document.getElementById("DailyRunCountdownSpan").innerHTML = String(
-						Math.round(
-							(Math.abs(
-								new Date(Date.now()) -
-									new Date(String(gotDailyGenDataRef.current.LatestRun))
-							) /
-								3600000 -
-								24) *
-								10000
-						) /
-							10000 +
-							" Hours"
-					);
+				// setInterval(() => {
+				// 	document.getElementById("DailyRunCountdownSpan").innerHTML = String(
+				// 		Math.round(
+				// 			(Math.abs(
+				// 				new Date(Date.now()) -
+				// 					new Date(String(gotDailyGenDataRef.current.LatestRun))
+				// 			) /
+				// 				3600000 -
+				// 				24) *
+				// 				10000
+				// 		) /
+				// 			10000 +
+				// 			" Hours"
+				// 	);
 
-					window.varInt = window.varInt - 1;
-					window.varInt2 = window.varInt2 - 1;
+				// 	window.varInt = window.varInt - 1;
+				// 	window.varInt2 = window.varInt2 - 1;
 
-					if (typeGameCounterRef.current === 0) {
-						window.varInt3 = window.varInt3 + 1;
-					} else {
-						window.varInt3 = 0;
-					}
-					setTypeGameTimer(window.varInt3);
+				// 	if (typeGameCounterRef.current === 0) {
+				// 		window.varInt3 = window.varInt3 + 1;
+				// 	} else {
+				// 		window.varInt3 = 0;
+				// 	}
+				// 	setTypeGameTimer(window.varInt3);
 
-					setIsStartTypeGame((isStartTypeGame) => {
-						setIsStartTypeGame(isStartTypeGame);
-						if (!isStartTypeGame) {
-							window.varInt3 = 0;
-						}
-					});
-					let FireReadBox = document.getElementById("FireReadTTSBoxValue").innerHTML;
+				// 	setIsStartTypeGame((isStartTypeGame) => {
+				// 		setIsStartTypeGame(isStartTypeGame);
+				// 		if (!isStartTypeGame) {
+				// 			window.varInt3 = 0;
+				// 		}
+				// 	});
 
-					if (window.varInt <= 0) {
-						// getAARootsData();
-						// getMicroHawaiiData();
-						// getPonoMapData();
-						// getPCPData();
+				// 	let FireReadBox = document.getElementById("FireReadTTSBoxValue").innerHTML;
 
-						if (
-							FireReadBox !== "" ||
-							document.getElementById("FireReadTTSBoxValue_Copy").value !== ""
-						) {
-							console.log(FireReadBox);
-							console.log("Sending HokuBot Database Updates");
-							var db3 = firebase.firestore();
-							db3
-								.collection("Public")
-								.doc("GeneratedData")
-								.set(
-									{ TTSString: "", GlobalClickData: loadedTotalClicksRef.current },
-									{ merge: true }
-								);
+				// 	if (window.varInt <= 0) {
+				// 		// getAARootsData();
+				// 		// getMicroHawaiiData();
+				// 		// getPonoMapData();
+				// 		// getPCPData();
 
-							if (
-								Math.round(
-									(Math.abs(
-										new Date(Date.now()) -
-											new Date(String(gotDailyGenDataRef.current.LatestRun))
-									) /
-										3600000 -
-										24) *
-										10000
-								) /
-									10000 >=
-								0
-							) {
-								db3.collection("Public").doc("GeneratedDaily").set(
-									{
-										LatestRun: firebase.firestore.FieldValue.serverTimestamp(),
-										GlobalClickData: loadedTotalClicksRef.current,
-									},
-									{ merge: true }
-								);
-							}
-						}
-						if (window.varInt <= 3) {
-							if (document.getElementById("FireReadTTSBoxValue_Copy").value !== "") {
-								document.getElementById("FireReadTTSBoxValue_Copy").value = "";
-							}
-						}
-						window.varInt2 = 60;
-						window.varInt = 60;
-					} else {
-						setSecondsCountdown(window.varInt - 1);
-						// Reset TTS Detect at 0s
-						//	console.log(parseInt(window.varInt2) % 10);
-						if (parseInt(window.varInt2) === 1) {
-							console.log("Checking TTS");
+				// 		if (
+				// 			FireReadBox !== "" ||
+				// 			document.getElementById("FireReadTTSBoxValue_Copy").value !== ""
+				// 		) {
+				// 			console.log(FireReadBox);
+				// 			console.log("Sending HokuBot Database Updates");
+				// 			var db3 = firebase.firestore();
+				// 			db3
+				// 				.collection("Public")
+				// 				.doc("GeneratedData")
+				// 				.set(
+				// 					{ TTSString: "", GlobalClickData: loadedTotalClicksRef.current },
+				// 					{ merge: true }
+				// 				);
 
-							let _speechSynth;
-							let _voices;
-							const _cache = {};
+				// 			if (
+				// 				Math.round(
+				// 					(Math.abs(
+				// 						new Date(Date.now()) -
+				// 							new Date(String(gotDailyGenDataRef.current.LatestRun))
+				// 					) /
+				// 						3600000 -
+				// 						24) *
+				// 						10000
+				// 				) /
+				// 					10000 >=
+				// 				0
+				// 			) {
+				// 				db3.collection("Public").doc("GeneratedDaily").set(
+				// 					{
+				// 						LatestRun: firebase.firestore.FieldValue.serverTimestamp(),
+				// 						GlobalClickData: loadedTotalClicksRef.current,
+				// 					},
+				// 					{ merge: true }
+				// 				);
+				// 			}
+				// 		}
+				// 		if (window.varInt <= 3) {
+				// 			if (document.getElementById("FireReadTTSBoxValue_Copy").value !== "") {
+				// 				document.getElementById("FireReadTTSBoxValue_Copy").value = "";
+				// 			}
+				// 		}
+				// 		window.varInt2 = 60;
+				// 		window.varInt = 60;
+				// 	} else {
+				// 		setSecondsCountdown(window.varInt - 1);
+				// 		// Reset TTS Detect at 0s
+				// 		//	console.log(parseInt(window.varInt2) % 10);
+				// 		if (parseInt(window.varInt2) === 1) {
+				// 			console.log("Checking TTS");
 
-							/**
-							 * retries until there have been voices loaded. No stopper flag included in this example.
-							 * Note that this function assumes, that there are voices installed on the host system.
-							 */
+				// 			let _speechSynth;
+				// 			let _voices;
+				// 			const _cache = {};
 
-							function loadVoicesWhenAvailable(onComplete = () => {}) {
-								_speechSynth = window.speechSynthesis;
-								const voices = _speechSynth.getVoices();
+				// 			/**
+				// 			 * retries until there have been voices loaded. No stopper flag included in this example.
+				// 			 * Note that this function assumes, that there are voices installed on the host system.
+				// 			 */
 
-								if (voices.length !== 0) {
-									_voices = voices;
-									onComplete();
-								} else {
-									return setTimeout(function () {
-										loadVoicesWhenAvailable(onComplete);
-									}, 100);
-								}
-							}
+				// 			function loadVoicesWhenAvailable(onComplete = () => {}) {
+				// 				_speechSynth = window.speechSynthesis;
+				// 				const voices = _speechSynth.getVoices();
 
-							/**
-							 * Returns the first found voice for a given language code.
-							 */
+				// 				if (voices.length !== 0) {
+				// 					_voices = voices;
+				// 					onComplete();
+				// 				} else {
+				// 					return setTimeout(function () {
+				// 						loadVoicesWhenAvailable(onComplete);
+				// 					}, 100);
+				// 				}
+				// 			}
 
-							function getVoices(locale) {
-								if (!_speechSynth) {
-									throw new Error("Browser does not support speech synthesis");
-								}
-								if (_cache[locale]) return _cache[locale];
+				// 			/**
+				// 			 * Returns the first found voice for a given language code.
+				// 			 */
 
-								_cache[locale] = _voices.filter((voice) => voice.lang === locale);
-								return _cache[locale];
-							}
+				// 			function getVoices(locale) {
+				// 				if (!_speechSynth) {
+				// 					throw new Error("Browser does not support speech synthesis");
+				// 				}
+				// 				if (_cache[locale]) return _cache[locale];
 
-							/**
-							 * Speak a certain text
-							 * @param locale the locale this voice requires
-							 * @param text the text to speak
-							 * @param onEnd callback if tts is finished
-							 */
+				// 				_cache[locale] = _voices.filter((voice) => voice.lang === locale);
+				// 				return _cache[locale];
+				// 			}
 
-							function playByText(locale, text, onEnd) {
-								const voices = getVoices(locale);
+				// 			/**
+				// 			 * Speak a certain text
+				// 			 * @param locale the locale this voice requires
+				// 			 * @param text the text to speak
+				// 			 * @param onEnd callback if tts is finished
+				// 			 */
 
-								// TODO load preference here, e.g. male / female etc.
-								// TODO but for now we just use the first occurrence
-								const utterance = new window.SpeechSynthesisUtterance();
-								utterance.voice = voices[0];
-								utterance.pitch = 1;
-								utterance.rate = 1;
-								utterance.voiceURI = "native";
-								utterance.volume = 1;
-								utterance.rate = 1;
-								utterance.pitch = 0.8;
-								utterance.text = text;
-								utterance.lang = locale;
+				// 			function playByText(locale, text, onEnd) {
+				// 				const voices = getVoices(locale);
 
-								if (onEnd) {
-									utterance.onend = onEnd;
-								}
+				// 				// TODO load preference here, e.g. male / female etc.
+				// 				// TODO but for now we just use the first occurrence
+				// 				const utterance = new window.SpeechSynthesisUtterance();
+				// 				utterance.voice = voices[0];
+				// 				utterance.pitch = 1;
+				// 				utterance.rate = 1;
+				// 				utterance.voiceURI = "native";
+				// 				utterance.volume = 1;
+				// 				utterance.rate = 1;
+				// 				utterance.pitch = 0.8;
+				// 				utterance.text = text;
+				// 				utterance.lang = locale;
 
-								_speechSynth.cancel(); // cancel current speak, if any is running
-								_speechSynth.speak(utterance);
-							}
+				// 				if (onEnd) {
+				// 					utterance.onend = onEnd;
+				// 				}
 
-							// on document ready
-							loadVoicesWhenAvailable(function () {
-								console.log("Checking TTS");
-							});
+				// 				_speechSynth.cancel(); // cancel current speak, if any is running
+				// 				_speechSynth.speak(utterance);
+				// 			}
 
-							function speak() {
-								setTimeout(
-									() =>
-										playByText(
-											"en-US",
-											document.getElementById("FireReadTTSBoxValue_Copy").value
-										),
-									300
-								);
-							}
+				// 			// on document ready
+				// 			loadVoicesWhenAvailable(function () {
+				// 				console.log("Checking TTS");
+				// 			});
 
-							// Reset Interval for TTS
-							speak();
-						}
-					}
-				}, 1000);
+				// 			function speak() {
+				// 				setTimeout(
+				// 					() =>
+				// 						playByText(
+				// 							"en-US",
+				// 							document.getElementById("FireReadTTSBoxValue_Copy").value
+				// 						),
+				// 					300
+				// 				);
+				// 			}
+
+				// 			// Reset Interval for TTS
+				// 			speak();
+				// 		}
+				// 	}
+				// }, 1000);
 			};
 			window.timerFunction();
-			setInterval(() => {
-				//Watch FireStore Hooks At Interval
-				let TwitchSpanValue =
-					document.getElementById("isTwitchOnlineSpan").innerHTML;
+			// setInterval(() => {
+			// 	//Watch FireStore Hooks At Interval
+			// 	let TwitchSpanValue =
+			// 		document.getElementById("isTwitchOnlineSpan").innerHTML;
 
-				let isFireOnlineValue =
-					document.getElementById("isFireOnlineSpan").innerHTML;
+			// 	let isFireOnlineValue =
+			// 		document.getElementById("isFireOnlineSpan").innerHTML;
 
-				let isFireReadBoxValue = document.getElementById("FireReadBox").innerHTML;
+			// 	let isFireReadBoxValue = document.getElementById("FireReadBox").innerHTML;
 
-				let isDiscordOnValue = document.getElementById("isDiscordOnSpan").innerHTML;
+			// 	let isDiscordOnValue = document.getElementById("isDiscordOnSpan").innerHTML;
 
-				// let FireReadTTSBox = document.getElementById(
-				// 	"FireReadTTSBoxValue"
-				// ).innerHTML;
+			// 	// let FireReadTTSBox = document.getElementById(
+			// 	// 	"FireReadTTSBoxValue"
+			// 	// ).innerHTML;
 
-				let isYouTubeOnValue = document.getElementById(
-					"isYouTubeOnlineSpan"
-				).innerHTML;
+			// 	let isYouTubeOnValue = document.getElementById(
+			// 		"isYouTubeOnlineSpan"
+			// 	).innerHTML;
 
-				//	console.log(document.getElementById("FireReadTTSBoxValue_Copy").value);
+			// 	//	console.log(document.getElementById("FireReadTTSBoxValue_Copy").value);
 
-				//Send TTS String to TTS Function
-				// if (FireReadTTSBox.length > 0) {
-				// 	setGotGeneratedTTS(FireReadTTSBox);
-				// }
-				//Check Twitch Text To State
-				if (TwitchSpanValue.includes("Offline")) {
-					setIsTwitchOnline(false);
-				}
+			// 	//Send TTS String to TTS Function
+			// 	// if (FireReadTTSBox.length > 0) {
+			// 	// 	setGotGeneratedTTS(FireReadTTSBox);
+			// 	// }
+			// 	//Check Twitch Text To State
+			// 	if (TwitchSpanValue.includes("Offline")) {
+			// 		setIsTwitchOnline(false);
+			// 	}
 
-				if (TwitchSpanValue.includes("Online")) {
-					setIsTwitchOnline(true);
-				}
-				//Check Firestore Online Text To State
-				if (isFireOnlineValue.includes("Offline")) {
-					setIsFirebaseConnected(false);
-				}
-				if (isFireOnlineValue.includes("Online")) {
-					setIsFirebaseConnected(true);
-				}
-				//Check DiscordAPI Online Text To State
-				if (isDiscordOnValue.includes("Offline")) {
-					setIsDiscordOn(false);
-				}
-				if (isDiscordOnValue.includes("Online")) {
-					setIsDiscordOn(true);
-				}
-				//Check DiscordAPI Online Text To State
-				if (isYouTubeOnValue.includes("Offline")) {
-					setIsYouTubeOn(false);
-				}
-				if (isYouTubeOnValue.includes("Online")) {
-					setIsYouTubeOn(true);
-				}
+			// 	if (TwitchSpanValue.includes("Online")) {
+			// 		setIsTwitchOnline(true);
+			// 	}
+			// 	//Check Firestore Online Text To State
+			// 	if (isFireOnlineValue.includes("Offline")) {
+			// 		setIsFirebaseConnected(false);
+			// 	}
+			// 	if (isFireOnlineValue.includes("Online")) {
+			// 		setIsFirebaseConnected(true);
+			// 	}
+			// 	//Check DiscordAPI Online Text To State
+			// 	if (isDiscordOnValue.includes("Offline")) {
+			// 		setIsDiscordOn(false);
+			// 	}
+			// 	if (isDiscordOnValue.includes("Online")) {
+			// 		setIsDiscordOn(true);
+			// 	}
+			// 	//Check DiscordAPI Online Text To State
+			// 	if (isYouTubeOnValue.includes("Offline")) {
+			// 		setIsYouTubeOn(false);
+			// 	}
+			// 	if (isYouTubeOnValue.includes("Online")) {
+			// 		setIsYouTubeOn(true);
+			// 	}
 
-				//Check FireStore GeneratedRawText To State
-				let splitReadText = isFireReadBoxValue.split("-@!%!%!@-");
-				let joinedText = [""];
-				if (joinedText) {
-					splitReadText.forEach((element, index) => {
-						joinedText.push(element);
-					});
-					setGotFireGeneratedText(joinedText);
-				}
-			}, 250);
+			// 	//Check FireStore GeneratedRawText To State
+			// 	let splitReadText = isFireReadBoxValue.split("-@!%!%!@-");
+			// 	let joinedText = [""];
+			// 	if (joinedText) {
+			// 		splitReadText.forEach((element, index) => {
+			// 			joinedText.push(element);
+			// 		});
+			// 		setGotFireGeneratedText(joinedText);
+			// 	}
+			// }, 250);
 		}
 	}, [
 		secondsCountdown,
