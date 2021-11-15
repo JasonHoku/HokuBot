@@ -772,4 +772,31 @@ exports.AlwaysOnFunction = functions
 				console.log(error);
 			}
 		}
+		//
 	});
+
+exports.MorningDiscordAnnouncer = functions
+	.pubsub.schedule("12 * * * *")
+	.timeZone("Pacific/Honolulu")
+	.onRun(() => {
+		//
+		AlwaysOnDiscordFunction();
+		async function AlwaysOnDiscordFunction() {
+			try {
+				const DiscordAlwaysOnline = require("./components/Discord/DiscordMessageHandler");
+				return await DiscordAlwaysOnline.DiscordAlwaysOnline();
+			} catch (error) {
+				console.log(error);
+			}
+		}
+		//
+	});
+		AlwaysOnDiscordFunction();
+		async function AlwaysOnDiscordFunction() {
+			try {
+				const DiscordAlwaysOnline = require("./components/Discord/DiscordMessageHandler");
+				return await DiscordAlwaysOnline.DiscordAlwaysOnline();
+			} catch (error) {
+				console.log(error);
+			}
+		}

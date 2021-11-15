@@ -37,12 +37,6 @@ import { TaskerComponent } from "./tasker";
 
 import { DisplayTrendData } from "./trendData";
 
-import {
-	FirebaseAppProvider,
-	useFirestoreDocData,
-	useFirestore,
-} from "reactfire";
-
 import { toast } from "react-toastify";
 
 const firebaseConfig = {
@@ -512,11 +506,6 @@ function ModeratorPage() {
 							id="StatusSpan_5"
 							style={{ position: "relative", top: "2px", width: "50%", zIndex: 12 }}
 						></span>{" "}
-						<FirebaseAppProvider firebaseConfig={firebaseConfig}>
-							<span>
-								<GetTwitchOnlineDoc />
-							</span>
-						</FirebaseAppProvider>
 					</button>
 					&nbsp;
 					<div hidden={TTVSettingsTab !== "Announcements"}>
@@ -2032,11 +2021,7 @@ function ModeratorPage() {
 									textShadow: " 0 0 5px #FFDDEE",
 									color: "#FFDDEE",
 								}}
-							>
-								<FirebaseAppProvider firebaseConfig={firebaseConfig}>
-									<GetGeneratedDataRunCount />
-								</FirebaseAppProvider>
-							</span>
+							></span>
 						</div>
 					</div>
 					<br /> <div style={{ height: "15px", marginLeft: "15px" }}></div>{" "}
@@ -2204,19 +2189,6 @@ function ModeratorPage() {
 								}}
 							>
 								{" "}
-								<FirebaseAppProvider firebaseConfig={firebaseConfig}>
-									<pre
-										style={{
-											whiteSpace: "pre-line",
-											margin: "15px",
-
-											textShadow: " 0 0 5px #FFDDEE",
-											color: "#FFDDEE",
-										}}
-									>
-										<GetGlobalClickStats />
-									</pre>
-								</FirebaseAppProvider>
 							</span>{" "}
 						</div>
 					</div>
@@ -2637,160 +2609,7 @@ function ModeratorPage() {
 		}
 		sendRequest();
 	}
-	function GetYouTubeOnlineDoc() {
-		const docRef = useFirestore().collection("Secrets").doc("MetaData");
-		const { data, status } = useFirestoreDocData(docRef);
-		if (data) {
-			if (status === "success") {
-				if (data.TwitchOn === true) {
-					return "Online ";
-				} else {
-					return "Offline ";
-				}
-			}
-		} else return "...";
-	}
-	function GetTwitchOnlineDoc() {
-		const docRef = useFirestore().collection("Secrets").doc("MetaData");
-		const { data, status } = useFirestoreDocData(docRef);
-		if (data) {
-			if (status === "success") {
-				if (data.TwitchOn === true) {
-					return "Online ";
-				} else {
-					return "Offline ";
-				}
-			}
-		} else return "...";
-	}
-	function GetDiscordOnDoc() {
-		const docRef = useFirestore().collection("Secrets").doc("MetaData");
-		const { data, status } = useFirestoreDocData(docRef);
-		if (data) {
-			if (status === "success") {
-				if (data.DiscordOn === true) {
-					return "Online ";
-				} else {
-					return "Offline ";
-				}
-			}
-		} else return "...";
-	}
-	function GetTFirebaseOnlineDoc() {
-		const docRef = useFirestore().collection("Secrets").doc("MetaData");
-		const { data, status } = useFirestoreDocData(docRef);
-		if (data) {
-			if (status === "success") {
-				if (data.FireConnected === true) {
-					return "Online ";
-				} else {
-					return "Offline ";
-				}
-			}
-		} else return "...";
-	}
-	function GetGeneratedTTSData() {
-		const docRef = useFirestore().collection("Public").doc("GeneratedData");
-		const { data, status } = useFirestoreDocData(docRef);
-		if (data) {
-			if (status === "success") {
-				if (String(data.TTSString).length > 1) {
-					return (
-						String(String(data.TTSString)).replace("!tts", "") ||
-						String(data.TTSString)
-					);
-				} else {
-					return "";
-				}
-			}
-		} else return "";
-	}
 
-	function GetUserTypingStats() {
-		const docRef = useFirestore().collection("Users").doc(auth.currentUser.uid);
-		const { data, status, error } = useFirestoreDocData(docRef);
-		if (error) {
-			return "Err";
-		}
-		if (data) {
-			if (status === "success") {
-				if (String(data.Stats).length > 1) {
-					return String(
-						"WPM:" +
-							String(data.Stats.WPMAverage) +
-							" WPM Record:" +
-							String(data.Stats.WPMRecord) +
-							"\r\n  CPM:" +
-							String(data.Stats.CPMAverage) +
-							" CPM Record:" +
-							String(data.Stats.CPMRecord) +
-							" \r\n Accuracy:" +
-							String(data.Stats.Accuracy)
-					);
-				} else {
-					return "";
-				}
-			}
-		} else return "";
-	}
-	function GetGlobalClickStats() {
-		const docRef = useFirestore().collection("Public").doc("GeneratedData");
-		const { data, status, error } = useFirestoreDocData(docRef);
-		if (error) {
-			return "Err";
-		}
-		if (data) {
-			if (status === "success") {
-				if (String(data.Stats).length > 1) {
-					return String(
-						"Total: " +
-							String(
-								parseInt(
-									data.GlobalClickData.aARoots[0] +
-										data.GlobalClickData.PonoMap[0] +
-										data.GlobalClickData.microHawaii[0]
-								)
-							) +
-							"\r\n \r\n AAR:" +
-							String(data.GlobalClickData.aARoots) +
-							"\r\nPM:" +
-							String(data.GlobalClickData.PonoMap) +
-							"\r\nMH:" +
-							String(data.GlobalClickData.microHawaii)
-					);
-				} else {
-					return "";
-				}
-			}
-		} else return "";
-	}
-
-	function GetGeneratedDataRunCount() {
-		const docRef = useFirestore().collection("Public").doc("GeneratedData");
-		const { data, status } = useFirestoreDocData(docRef);
-		if (data) {
-			if (status === "success") {
-				if (String(data.RunCounter).length > 1) {
-					return String(String(data.RunCounter));
-				} else {
-					return "Offline ";
-				}
-			}
-		} else return "...";
-	}
-	function GetGeneratedDataLastRun() {
-		const docRef = useFirestore().collection("Public").doc("GeneratedData");
-		const { data, status } = useFirestoreDocData(docRef);
-		if (data) {
-			if (status === "success") {
-				if (String(data.LatestRun).length > 1) {
-					return String(String(data.LatestRun.toDate()));
-				} else {
-					return "Offline ";
-				}
-			}
-		} else return "...";
-	}
 	return (
 		<div>
 			<span
@@ -3015,11 +2834,6 @@ function ModeratorPage() {
 									/>
 								</svg>
 							</span>{" "}
-							<FirebaseAppProvider firebaseConfig={firebaseConfig}>
-								<span id="isFireOnlineSpan">
-									<GetTFirebaseOnlineDoc />
-								</span>
-							</FirebaseAppProvider>
 						</span>{" "}
 						<br />
 					</span>
@@ -3046,11 +2860,7 @@ function ModeratorPage() {
 								/>
 							</svg>
 						</span>
-						<FirebaseAppProvider firebaseConfig={firebaseConfig}>
-							<span id="isTwitchOnlineSpan">
-								<GetTwitchOnlineDoc />
-							</span>
-						</FirebaseAppProvider>
+
 						<br />
 						<span
 							style={{
@@ -3080,11 +2890,6 @@ function ModeratorPage() {
 									/>
 								</svg>
 							</span>
-							<FirebaseAppProvider firebaseConfig={firebaseConfig}>
-								<span id="isYouTubeOnlineSpan">
-									<GetYouTubeOnlineDoc />
-								</span>
-							</FirebaseAppProvider>
 						</span>
 						<br />
 						<span style={{ textAlign: "right", position: "relative", zIndex: 12 }}>
@@ -3103,11 +2908,6 @@ function ModeratorPage() {
 									/>
 								</svg>
 							</span>
-							<FirebaseAppProvider firebaseConfig={firebaseConfig}>
-								<span id="isDiscordOnSpan">
-									<GetDiscordOnDoc />
-								</span>
-							</FirebaseAppProvider>
 						</span>
 					</span>
 				</span>
@@ -3119,16 +2919,7 @@ function ModeratorPage() {
 					margin: "auto",
 					textAlign: "left",
 				}}
-			>
-				<FirebaseAppProvider firebaseConfig={firebaseConfig}>
-					<span hidden={true} id="FireReadBox">
-						<GetGeneratedDataLastRun />
-					</span>
-					<span hidden={true} id="FireReadTTSBoxValue">
-						<GetGeneratedTTSData />
-					</span>
-				</FirebaseAppProvider>
-			</span>
+			></span>
 			<span
 				style={{
 					textAlign: "left",

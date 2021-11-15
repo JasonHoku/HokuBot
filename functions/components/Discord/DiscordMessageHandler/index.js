@@ -23,6 +23,7 @@ module.exports.DiscordAlwaysOnline = async function () {
 					data["key"] = key;
 					dbData[key] = data;
 				});
+
 				DiscordAPI = String(dbData.APIKeys.DiscordAPI);
 				//Begin Development With ENV Variables
 				let client = new Discord.Client();
@@ -30,17 +31,30 @@ module.exports.DiscordAlwaysOnline = async function () {
 				client.options.restRequestTimeout = 30000;
 				//Login To DiscordAP
 				console.log("|D| Discord Testing Logged-In");
+				console.log(dbData.MetaData.DiscordCheckIn);
+				console.log(
+					parseInt(parseInt(new Date().getTime() - dbData.MetaData.DiscordCheckIn))
+				);
+
 				if (client.user) {
 					console.log(client.user.tag);
 				} else {
 					// Log When Ready
-					loginDiscord().then(() => {
-						// 	setTimeout(() => {
-						// 		client.destroy();
-						// 		client.ws.destroy();
-						// console.log(client)
-						// 	}, 10000);
-					});
+					console.log("No User Found");
+					loginDiscord();
+					if (
+						parseInt(new Date().getTime() - dbData.MetaData.DiscordCheckIn) >
+						1000 * 60
+					) {
+						console.log("Check in is late");
+						loginDiscord().then(() => {
+							// 	setTimeout(() => {
+							// 		client.destroy();
+							// 		client.ws.destroy();
+							// console.log(client)
+							// 	}, 10000);
+						});
+					}
 					async function loginDiscord() {
 						console.log("|D| Discord Logging In");
 
@@ -51,21 +65,35 @@ module.exports.DiscordAlwaysOnline = async function () {
 						client.on("ready", (el) => {
 							console.log(`|D| Logged in as ${client.user.tag}!`);
 							///////////////////////////////////////////////
+							const list = client.users.cache.find(
+								(user) => user.username === "Jahoku"
+							);
+							// console.log(list)
+							//
+							list.send(`Logged In`);
 							var resetVar = true;
 							setInterval(() => {
 								resetVar = !resetVar;
+
+								var date = String(new Date().getTime());
 								try {
 									// console.log("client.uptime:" + client.uptime);
 									// console.log("client.user:" + client.user.tag);
 									if (client.uptime) {
-										console.log("Service Is Warm");
+										console.log("Service Is Warm at " + date);
+										db.collection("Secrets").doc("MetaData").set(
+											{
+												DiscordCheckIn: date,
+											},
+											{ merge: true }
+										);
 									} else {
 										console.log("No UpTime Found");
 									}
 								} catch (error) {
 									console.log("Caught Discord Client Error");
 								}
-							}, 60000);
+							}, 10000);
 							///////////////////////////////////////////////
 							client.on("message", (el) => {
 								if (el.author.id !== "719591367113703526") {
@@ -73,7 +101,7 @@ module.exports.DiscordAlwaysOnline = async function () {
 									if (JSON.stringify(el).length < 2000) {
 										//
 										const list = client.users.cache.find(
-											(user) => user.username === "JahHoku"
+											(user) => user.username === "Jahoku"
 										);
 										//
 										list.send(`Message Data 2: ${JSON.stringify(el)}`);
@@ -143,6 +171,6 @@ module.exports.DiscordAlwaysOnline = async function () {
 			});
 	}
 	getDBData().then(() => {
-		return console.log("Finished");
+		console.log("Finished");
 	});
 };

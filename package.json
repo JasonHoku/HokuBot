@@ -1,82 +1,82 @@
 {
-    "name": "hoku-bot",
-    "version": "0.121.0",
-    "private": true,
-    "dependencies": {
-        "@emotion/react": "^11.4.1",
-        "@emotion/styled": "^11.3.0",
-        "@material-ui/core": "^4.11.4",
-        "@mui/material": "^5.0.1",
-        "@testing-library/jest-dom": "^5.11.4",
-        "@testing-library/react": "^11.1.0",
-        "@testing-library/user-event": "^12.1.10",
-        "discord.js": "^12.2.0",
-        "dotenv": "^8.2.0",
-        "firebase": "^8.2.9",
-        "firebase-admin": "^9.5.0",
-        "firebase-functions": "^3.14.1",
-        "firebaseui": "^4.7.3",
-        "got": "^11.8.2",
-        "node-fetch": "^2.6.1",
-        "nodemon": "^2.0.7",
-        "npm-run-all": "^4.1.5",
-        "react": "^17.0.1",
-        "react-dom": "^17.0.1",
-        "react-draggable": "^4.4.3",
-        "react-icons": "^4.2.0",
-        "react-router-dom": "^5.2.0",
-        "react-scripts": "4.0.3",
-        "react-toastify": "^7.0.4",
-        "reactfire": "^3.0.0-rc.0",
-        "reactstrap": "^8.9.0",
-        "tmi.js": "^1.8.3",
-        "twitch": "^4.5.0",
-        "twitch-auth": "^4.5.0",
-        "twitch-chat-client": "^4.5.0",
-        "twitch-eventsub": "^4.5.0",
-        "twitch-pubsub-client": "^4.5.0",
-        "twitch-webhooks": "^4.5.0",
-        "web-vitals": "^1.0.1",
-        "ytsearcher": "^1.2.3"
-    },
-    "scripts": {
-        "femu:emuStart": "firebase emulators:start",
-        "femu:reactStart": "npm run start",
-        "femu": "npm-run-all --parallel --print-label femu:*",
-        "fb:version": "node generate-new-feature",
-        "fb:build": "npm run build",
-        "fb:firebase": "firebase deploy",
-        "fbf:version": "node generate-new-feature",
-        "fbf:firebase": "firebase deploy --only functions",
-        "fbf": "npm-run-all --sequential --print-label fbf:*",
-        "fb": "npm-run-all --sequential --print-label fb:*",
-        "fbh:version": "node generate-new-feature",
-        "fbh:build": "npm run build",
-        "fbh:firebase": "firebase deploy --only hosting",
-        "fbh": "npm-run-all --sequential --print-label fbh:*",
-        "start": "react-scripts --max_old_space_size=4096 start",
-        "build": "react-scripts --max_old_space_size=4096 build",
-        "build:production": "SET REACT_APP_ENV=production & npm run build",
-        "start-prod": "SET NODE_ENV=production & npm start",
-        "test": "CI=true react-scripts test",
-        "eject": "react-scripts eject"
-    },
-    "eslintConfig": {
-        "extends": [
-            "react-app",
-            "react-app/jest"
-        ]
-    },
-    "browserslist": {
-        "production": [
-            ">0.2%",
-            "not dead",
-            "not op_mini all"
-        ],
-        "development": [
-            "last 1 chrome version",
-            "last 1 firefox version",
-            "last 1 safari version"
-        ]
-    }
+	"name": "hoku-bot",
+	"version": "0.121.0",
+	"private": true,
+	"dependencies": {
+		"@emotion/react": "^11.4.1",
+		"@emotion/styled": "^11.3.0",
+		"@material-ui/core": "^4.11.4",
+		"@mui/material": "^5.0.1",
+		"@testing-library/jest-dom": "^5.11.4",
+		"@testing-library/react": "^11.1.0",
+		"@testing-library/user-event": "^12.1.10",
+		"discord.js": "^12.2.0",
+		"dotenv": "^8.2.0",
+		"firebase": "^8.2.9",
+		"firebase-admin": "^9.5.0",
+		"firebase-functions": "^3.14.1",
+		"firebaseui": "^4.7.3",
+		"got": "^11.8.2",
+		"node-fetch": "^2.6.1",
+		"nodemon": "^2.0.7",
+		"npm-run-all": "^4.1.5",
+		"react": "^17.0.1",
+		"react-dom": "^17.0.1",
+		"react-draggable": "^4.4.3",
+		"react-icons": "^4.2.0",
+		"react-router-dom": "^5.2.0",
+		"react-toastify": "^7.0.4",
+		"reactstrap": "^8.9.0",
+		"tmi.js": "^1.8.3",
+		"twitch-auth": "^4.5.0",
+		"twitch-chat-client": "^4.5.0",
+		"twitch-eventsub": "^4.5.0",
+		"twitch-pubsub-client": "^4.5.0",
+		"twitch-webhooks": "^4.5.0",
+		"web-vitals": "^1.0.1",
+		"ytsearcher": "^1.2.3"
+	},
+	"devDependencies": {
+		"react-scripts": "4.0.3"
+	},
+	"scripts": {
+		"femu:emuStart": "firebase emulators:start",
+		"femu:reactStart": "npm run start",
+		"femu": "npm-run-all --parallel --print-label femu:*",
+		"fb:version": "node generate-new-feature",
+		"fb:build": "npm run build",
+		"fb:firebase": "firebase deploy",
+		"fbf:version": "node generate-new-feature",
+		"fbf:firebase": "firebase deploy --only functions",
+		"fbf": "npm-run-all --sequential --print-label fbf:*",
+		"fb": "npm-run-all --sequential --print-label fb:*",
+		"fbh:version": "node generate-new-feature",
+		"fbh:build": "npm run build",
+		"fbh:firebase": "firebase deploy --only hosting",
+		"fbh": "npm-run-all --sequential --print-label fbh:*",
+		"start": "react-scripts --max_old_space_size=4096 start",
+		"build": "react-scripts --max_old_space_size=4096 build",
+		"build:production": "SET REACT_APP_ENV=production & npm run build",
+		"start-prod": "SET NODE_ENV=production & npm start",
+		"test": "CI=true react-scripts test",
+		"eject": "react-scripts eject"
+	},
+	"eslintConfig": {
+		"extends": [
+			"react-app",
+			"react-app/jest"
+		]
+	},
+	"browserslist": {
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
+	}
 }
