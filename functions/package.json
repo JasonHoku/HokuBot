@@ -23,7 +23,7 @@
 		"firebase-functions": "^3.15.7",
 		"google-trends-api": "^4.9.2",
 		"html-to-text": "^8.0.0",
-		"node-fetch": "^2.6.1",
+		"node-fetch": "^2.6.7",
 		"tmi.js": "^1.8.3",
 		"twitch-auth": "^4.5.0",
 		"twitch-chat-client": "^4.5.0",
